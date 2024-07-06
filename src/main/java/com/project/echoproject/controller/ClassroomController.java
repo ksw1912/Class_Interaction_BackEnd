@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController //api로 보내는 어노테이션
+@RestController //api로 보내는 어노테이션임
 @RequestMapping("/classrooms")
 public class ClassroomController {
 
