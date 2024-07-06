@@ -1,6 +1,7 @@
 package com.project.echoproject.domain;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -8,8 +9,11 @@ import jakarta.persistence.Id;
 public class Professor {
     @Id
     private String professorID;
+    @Column
     private String name;
+    @Column
     private String email;
+    @Column
     private String password;
 
     public String getProfessorID() {
