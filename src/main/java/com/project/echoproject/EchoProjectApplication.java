@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.project.echoproject.repository") //jpa사용시 추가
+@EnableJpaRepositories() //jpa사용시 추가
 public class EchoProjectApplication {
 
     public static void main(String[] args) {

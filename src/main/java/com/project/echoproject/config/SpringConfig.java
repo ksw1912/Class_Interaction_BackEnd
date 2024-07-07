@@ -1,4 +1,4 @@
-package com.project.echoproject;
+package com.project.echoproject.config;
 
 import com.project.echoproject.repository.ClassroomRepository;
 import com.project.echoproject.service.ClassroomService;
