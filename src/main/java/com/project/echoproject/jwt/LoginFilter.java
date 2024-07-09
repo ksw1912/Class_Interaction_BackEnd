@@ -3,6 +3,7 @@ package com.project.echoproject.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.echoproject.domain.User;
 import com.project.echoproject.dto.CustomUserDetails;
+import com.project.echoproject.dto.LoginRequest;
 import com.project.echoproject.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +21,11 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
 
-    public LoginFilter(AuthenticationManager authenticationManager,JWTUtil jwtUtil,UserRepository userRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -35,14 +35,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         //클라이언트 요청에서 username, password 추출
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        try {
+            LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 
-        //스프링 시큐리티에서 email과 password를 검증하기 위해서는 token에 담아야 함
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+            String email = loginRequest.getEmail();
+            String password = loginRequest.getPassword();
+            System.out.println(email + " " + password);
 
-        //token에 담은 검증을 위한 AuthenticationManager로 전달
-        return authenticationManager.authenticate(authToken);
+            //스프링 시큐리티에서 email과 password를 검증하기 위해서는 token에 담아야 함
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+
+            //token에 담은 검증을 위한 AuthenticationManager로 전달
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)

@@ -66,7 +66,7 @@ public class SecurityConfig {
                         configuration.setMaxAge(3600L);
 
                         configuration.setExposedHeaders(Collections.singletonList("Authorization")); //jwt받아야해서 설정
-                        return null;
+                        return configuration;
                     }
                 }));
         http
