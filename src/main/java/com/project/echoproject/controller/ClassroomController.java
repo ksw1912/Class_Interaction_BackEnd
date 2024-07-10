@@ -38,15 +38,15 @@ public class ClassroomController {
         return classroomService.getAllClassrooms();
     }
 
-    @GetMapping("/name/{className}")
+    @GetMapping("/{className}")
     public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
         return classroomService.getClassroomByClassName(className);
     }
 
-    @PutMapping("/{id}")
-    public Classroom updateClassroom(@PathVariable Long id, @RequestBody Classroom updatedClassroom) {
-        return classroomService.updateClassroom(id, updatedClassroom);
-    }
+//    @PutMapping("/{id}")
+//    public Classroom updateClassroom(@PathVariable Long id, @RequestBody Classroom updatedClassroom) {
+//        return classroomService.updateClassroom(id, updatedClassroom);
+//    }
 
     @DeleteMapping("/{id}")
     public void deleteClassroom(@PathVariable Long id) {
