@@ -30,7 +30,6 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
 
-
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository) {
 
         this.authenticationConfiguration = authenticationConfiguration;
@@ -59,7 +58,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("*")); //프론트엔드 서버
+                        configuration.addAllowedOriginPattern("*"); //프론트엔드 서버
                         configuration.setAllowedMethods(Collections.singletonList("*")); //get post header 모두 혀용
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));

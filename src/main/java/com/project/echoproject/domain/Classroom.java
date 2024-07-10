@@ -1,25 +1,33 @@
 package com.project.echoproject.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @Entity(name = "classroom") //테이블명: classroom
 public class Classroom{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="classID")
-    private Long id;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "classId",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID classId;
+    @ManyToOne //many: 클래스룸 one: 교육자
+    @JoinColumn(nullable = false)
+    private Instructor instructor;
     @Column
     private String className;
     @Column
-    private String professorName;
-    @ManyToOne
-    private Professor professor;
+    private String instructorName;
 
-    public Long getId() {
-        return id;
+    public UUID getClassId() {
+        return classId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setClassId(UUID classId) {
+        this.classId = classId;
     }
 
     public String getClassName() {
@@ -30,19 +38,19 @@ public class Classroom{
         this.className = className;
     }
 
-    public String getProfessorName() {
-        return professorName;
+    public String getInstructorName() {
+        return instructorName;
     }
 
-    public void setProfessorName(String professorName) {
-        this.professorName = professorName;
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
     }
 
-    public Professor getProfessor() {
-        return professor;
+    public Instructor getInstructor() {
+        return instructor;
     }
 
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
     }
 }

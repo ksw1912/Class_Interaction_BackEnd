@@ -29,6 +29,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+
+        // 필터가 /login 경로에 대해서만 작동하도록 설정가능
+        //setFilterProcessesUrl("/login");
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.project.echoproject.controller;
 
 import com.project.echoproject.domain.Classroom;
+import com.project.echoproject.dto.websocketDTO.MessageDTO;
 import com.project.echoproject.service.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 import java.util.Optional;
