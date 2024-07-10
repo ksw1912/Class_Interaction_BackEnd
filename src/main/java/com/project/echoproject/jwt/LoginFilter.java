@@ -3,12 +3,11 @@ package com.project.echoproject.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.echoproject.domain.User;
 import com.project.echoproject.dto.CustomUserDetails;
-import com.project.echoproject.dto.LoginRequest;
+import com.project.echoproject.dto.LoginDTO;
 import com.project.echoproject.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +38,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //클라이언트 요청에서 username, password 추출
         try {
-            LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+            LoginDTO loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
 
             String email = loginRequest.getEmail();
             String password = loginRequest.getPassword();

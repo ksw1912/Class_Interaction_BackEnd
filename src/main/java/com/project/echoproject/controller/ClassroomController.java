@@ -1,7 +1,9 @@
 package com.project.echoproject.controller;
 
 import com.project.echoproject.domain.Classroom;
+import com.project.echoproject.dto.ClassroomDTO;
 import com.project.echoproject.dto.websocketDTO.MessageDTO;
+import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,21 +19,27 @@ import java.util.Optional;
 public class ClassroomController {
 
     private final ClassroomService classroomService;
-
+    private final JWTUtil jwtUtil;
     @Autowired
-    public ClassroomController(ClassroomService classroomService) {
+    public ClassroomController(ClassroomService classroomService ,JWTUtil jwtUtil) {
         this.classroomService = classroomService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
-    public Classroom createClassroom(@RequestBody Classroom classroom) {
-        return classroomService.createClassroom(classroom);
+    public Classroom createClassroom(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
+
+        String jwtToken = token.substring(7);
+        String email = jwtUtil.getEmail(jwtToken);
+        System.out.println("토큰 email: "+email);
+
+        return classroomService.createClassroom(classroomDTO,email);
     }
 
-    @GetMapping("/{id}")
-    public Optional<Classroom> getClassroomById(@PathVariable Long id) {
-        return classroomService.getClassroomById(id);
-    }
+//    @GetMapping("/{id}")
+//    public Optional<Classroom> getClassroomById(@PathVariable Long id) {
+//        return classroomService.getClassroomById(id);
+//    }
 
     @GetMapping
     public List<Classroom> getAllClassrooms() {

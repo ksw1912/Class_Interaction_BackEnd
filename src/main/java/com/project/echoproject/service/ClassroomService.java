@@ -1,35 +1,47 @@
 package com.project.echoproject.service;
 
 import com.project.echoproject.domain.Classroom;
+import com.project.echoproject.domain.Instructor;
+import com.project.echoproject.domain.User;
+import com.project.echoproject.dto.ClassroomDTO;
 import com.project.echoproject.repository.ClassroomRepository;
+import com.project.echoproject.repository.InstructorRepository;
+import com.project.echoproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
-
+    private final UserRepository userRepository;
     @Autowired
-    public ClassroomService(ClassroomRepository classroomRepository) {
+    public ClassroomService(ClassroomRepository classroomRepository, UserRepository userRepository) {
         this.classroomRepository = classroomRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public Classroom createClassroom(Classroom classroom) {
-        if (isClassNameDuplicate(classroom.getClassName())) {
+    public Classroom createClassroom(ClassroomDTO classroomDTO, String email) {
+        String className = classroomDTO.getClassName();
+        User user = userRepository.findByEmail(email);
+
+        if (isClassNameDuplicate(classroomDTO.getClassName())) {
             throw new IllegalArgumentException("Class name already exists");
         }
+        // Classroom 객체 생성 및 저장
+        Classroom classroom = new Classroom();
+        classroom.setClassName(className);
+        classroom.setInstructorName(user.getUsername());
+
         return classroomRepository.save(classroom);
     }
 
-    public Optional<Classroom> getClassroomById(Long id) {
-        return classroomRepository.findById(id);
-    }
 
     public Optional<Classroom> getClassroomByClassName(String className) {
         return classroomRepository.findByClassName(className);
@@ -53,7 +65,7 @@ public class ClassroomService {
 //    }
 
     @Transactional
-    public void deleteClassroom(Long id) {
+    public void deleteClassroom(UUID id) {
         classroomRepository.deleteById(id);
     }
 
