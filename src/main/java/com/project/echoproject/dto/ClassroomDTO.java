@@ -1,6 +1,7 @@
 package com.project.echoproject.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ClassroomDTO {
     private String ClassName;

@@ -19,17 +19,17 @@ import java.util.UUID;
 public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
-    private final UserRepository userRepository;
+    private final InstructorRepository instructorRepository;
     @Autowired
-    public ClassroomService(ClassroomRepository classroomRepository, UserRepository userRepository) {
+    public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository) {
         this.classroomRepository = classroomRepository;
-        this.userRepository = userRepository;
+        this.instructorRepository = instructorRepository;
     }
 
     @Transactional
     public Classroom createClassroom(ClassroomDTO classroomDTO, String email) {
         String className = classroomDTO.getClassName();
-        User user = userRepository.findByEmail(email);
+        Instructor instructor = instructorRepository.findByEmail(email);
 
         if (isClassNameDuplicate(classroomDTO.getClassName())) {
             throw new IllegalArgumentException("Class name already exists");
@@ -37,9 +37,15 @@ public class ClassroomService {
         // Classroom 객체 생성 및 저장
         Classroom classroom = new Classroom();
         classroom.setClassName(className);
-        classroom.setInstructorName(user.getUsername());
+        classroom.setInstructor(instructor);
 
         return classroomRepository.save(classroom);
+    }
+
+    // 특정 교수의 이메일로 클래스룸 목록 가져오기
+    @Transactional(readOnly = true)
+    public List<Classroom> getClassroomsByInstructorEmail(String email) {
+        return classroomRepository.findByInstructorEmail(email);
     }
 
 
@@ -72,5 +78,12 @@ public class ClassroomService {
     //테이블내에 className이 존재 여부
     public boolean isClassNameDuplicate(String className) {
         return classroomRepository.existsByClassName(className);
+    }
+    public boolean isClassIdDuplicate(UUID classId) {
+        return classroomRepository.existsByClassId(classId);
+    }
+    @Transactional(readOnly = true)
+    public Optional<Classroom> getClassroomById(UUID classId) {
+        return classroomRepository.findById(classId);
     }
 }

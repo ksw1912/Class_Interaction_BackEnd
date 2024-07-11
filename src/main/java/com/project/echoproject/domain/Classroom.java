@@ -3,6 +3,7 @@ package com.project.echoproject.domain;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity(name = "classroom") //테이블명: classroom
@@ -20,7 +21,7 @@ public class Classroom{
     @Column
     private String className;
     @Column
-    private String instructorName;
+    private LocalDate date;
 
     public UUID getClassId() {
         return classId;
@@ -38,13 +39,6 @@ public class Classroom{
         this.className = className;
     }
 
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
 
     public Instructor getInstructor() {
         return instructor;
@@ -52,5 +46,15 @@ public class Classroom{
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.date = LocalDate.now();
     }
 }
