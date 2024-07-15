@@ -13,4 +13,12 @@ import java.util.UUID;
 public class Student extends User{
     @Column
     private String department;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 }

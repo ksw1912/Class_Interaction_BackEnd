@@ -1,7 +1,10 @@
 package com.project.echoproject.service;
 
-import com.project.echoproject.domain.User;
-import com.project.echoproject.dto.JoinDTO;
+import com.project.echoproject.domain.Instructor;
+import com.project.echoproject.domain.Student;
+import com.project.echoproject.dto.UserDTO;
+import com.project.echoproject.repository.InstructorRepository;
+import com.project.echoproject.repository.StudentRepository;
 import com.project.echoproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,32 +14,47 @@ import org.springframework.stereotype.Service;
 public class JoinService {
 
     private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final InstructorRepository instructorRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public JoinService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public JoinService(UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.instructorRepository = instructorRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void joinProcess(JoinDTO joinDTO) {
-
-        String username = joinDTO.getUsername();
-        String email = joinDTO.getEmail();
-        String password = joinDTO.getPassword();
-        String role = joinDTO.getRole();
+    public void joinProcess(UserDTO userDTO) {
+        String username = userDTO.getUsername();
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+        String role = userDTO.getRole();
+        String department = userDTO.getDepartment();
         Boolean isExist = userRepository.existsByEmail(email);
 
         if (isExist) {
             throw new IllegalStateException("이메일이 존재합니다: " + email);
         }
-
-        User data = new User();
-        data.setEmail(email);
-        data.setUsername(username);
-        data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole(role);
-
-        userRepository.save(data);
+        if ("student".equals(role)) {
+            Student student = new Student();
+            student.setUsername(username);
+            student.setEmail(email);
+            student.setPassword(bCryptPasswordEncoder.encode(password));
+            student.setRole(role);
+            student.setDepartment(department);
+            studentRepository.save(student);
+        } else if ("instructor".equals(role)) {
+            Instructor instructor = new Instructor();
+            instructor.setUsername(username);
+            instructor.setEmail(email);
+            instructor.setPassword(bCryptPasswordEncoder.encode(password));
+            instructor.setRole(role);
+            instructor.setDepartment(department);
+            instructorRepository.save(instructor);
+        } else {
+            throw new IllegalStateException("유효하지 않은 역할입니다: " + role);
+        }
     }
 }

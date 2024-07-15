@@ -1,10 +1,12 @@
 package com.project.echoproject.controller;
 
+import com.project.echoproject.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,4 +26,10 @@ public class MainController {
 
         return "Main Controller" + username + role;
     }
+
+//    @PostMapping("/login")
+//    public User Login(){
+//        r
+//        return
+//    }
 }

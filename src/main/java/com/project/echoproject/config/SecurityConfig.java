@@ -4,6 +4,9 @@ package com.project.echoproject.config;
 import com.project.echoproject.jwt.JWTFilter;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.jwt.LoginFilter;
+import com.project.echoproject.repository.ClassroomRepository;
+import com.project.echoproject.repository.InstructorRepository;
+import com.project.echoproject.repository.StudentRepository;
 import com.project.echoproject.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +32,19 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
+    private final ClassroomRepository classroomRepository;
+    private final StudentRepository studentRepository;
+    private final InstructorRepository instructorRepository;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository) {
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, ClassroomRepository classroomRepository, InstructorRepository instructorRepository1) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.classroomRepository = classroomRepository;
+        this.instructorRepository = instructorRepository1;
     }
 
     //AuthenticationManager Bean 등록
@@ -81,13 +91,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join"
                         ).permitAll() //모든 권한
-                        .requestMatchers("/instructor").hasRole("instructor") //admin만
+                        .requestMatchers("/instructor/").hasRole("instructor") //admin만
                         .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,userRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,userRepository,classroomRepository,studentRepository, instructorRepository), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .sessionManagement((session) -> session

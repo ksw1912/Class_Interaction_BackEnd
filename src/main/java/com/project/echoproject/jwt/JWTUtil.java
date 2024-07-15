@@ -30,7 +30,6 @@ public class JWTUtil {
     }
     //토근 검증(소멸) 여부
     public Boolean isExpired(String token) {
-
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 

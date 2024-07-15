@@ -22,7 +22,5 @@ public interface ClassroomRepository extends JpaRepository<Classroom, UUID> {
     List<Classroom> findByInstructorId(@Param("instructorId") UUID instructorId);
 
     // 특정 교수의 이메일로 클래스룸 찾기
-    @Query("SELECT c FROM classroom c WHERE c.instructor.email = :email")
-    List<Classroom> findByInstructorEmail(@Param("email") String email);
-
+    List<Classroom> findByInstructorEmail(String email);
 }

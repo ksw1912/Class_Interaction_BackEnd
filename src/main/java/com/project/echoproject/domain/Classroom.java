@@ -1,27 +1,56 @@
 package com.project.echoproject.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "classroom") //테이블명: classroom
-public class Classroom{
+public class Classroom {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "classId",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Column(updatable = false, nullable = false, columnDefinition = "CHAR(36)")
     private UUID classId;
     @ManyToOne //many: 클래스룸 one: 교육자
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "instructor_id", nullable = false)
     private Instructor instructor;
     @Column
     private String className;
     @Column
-    private LocalDate date;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdAt;
+    @Column
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime updatedAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public UUID getClassId() {
         return classId;
@@ -50,11 +79,13 @@ public class Classroom{
 
     @PrePersist
     protected void onCreate() {
-        this.date = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.date = LocalDate.now();
+        this.updatedAt = LocalDateTime.now();
     }
+
 }

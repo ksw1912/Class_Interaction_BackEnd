@@ -31,38 +31,39 @@ public class ClassroomController {
 
     @PostMapping
     public Classroom createClassroom(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
+        System.out.println("createClassroom 메서드가 호출");
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
         System.out.println("토큰 email: "+email);
         return classroomService.createClassroom(classroomDTO,email);
     }
-    // 특정 교수의 이메일로 클래스룸 목록 가져오기 엔드포인트
-    @GetMapping("/instructor/{email}")
-    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {
-        List<Classroom> classrooms = classroomService.getClassroomsByInstructorEmail(email);
-        return classrooms;
-    }
-
-    @GetMapping("/classroomEnter/{id}")
-    public Optional<Classroom> getClassroomById(@PathVariable UUID id) {
-        return classroomService.getClassroomById(id);
-    }
-
-    @GetMapping
-    public List<Classroom> getAllClassrooms() {
-        return classroomService.getAllClassrooms();
-    }
-
-    //안쓸 수도
-    @GetMapping("/{className}")
-    public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
-        return classroomService.getClassroomByClassName(className);
-    }
-    @DeleteMapping("/classroomDelete/{id}")
-    public ApiResponse deleteClassroom(@PathVariable UUID id) {
-        classroomService.deleteClassroom(id);
-        return new ApiResponse("수업 삭제 성공");
-    }
+//    // 특정 교수의 이메일로 클래스룸 목록 가져오기
+//    @GetMapping("/instructor/{email}")
+//    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {
+//        List<Classroom> classrooms = classroomService.getClassroomsByInstructorEmail(email);
+//        return classrooms;
+//    }
+//
+//    @GetMapping("/classroomEnter/{id}")
+//    public Optional<Classroom> getClassroomById(@PathVariable UUID id) {
+//        return classroomService.getClassroomById(id);
+//    }
+//
+//    @GetMapping
+//    public List<Classroom> getAllClassrooms() {
+//        return classroomService.getAllClassrooms();
+//    }
+//
+//    //안쓸 수도
+//    @GetMapping("/{className}")
+//    public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
+//        return classroomService.getClassroomByClassName(className);
+//    }
+//    @DeleteMapping("/classroomDelete/{id}")
+//    public ApiResponse deleteClassroom(@PathVariable UUID id) {
+//        classroomService.deleteClassroom(id);
+//        return new ApiResponse("수업 삭제 성공");
+//    }
 
 //    @PutMapping("/{id}")
 //    public Classroom updateClassroom(@PathVariable Long id, @RequestBody Classroom updatedClassroom) {

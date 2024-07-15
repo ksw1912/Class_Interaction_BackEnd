@@ -27,12 +27,13 @@ public class JWTFilter extends OncePerRequestFilter {
             System.out.println("token null");
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
+
             return;
         }
         System.out.println("authorization now");
+        System.out.println("접속한 사용자 토큰:"+ authorization);
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
-
         //토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
             System.out.println("token expired");
@@ -43,6 +44,7 @@ public class JWTFilter extends OncePerRequestFilter {
         //토큰에서 username과 role 획득
         String email = jwtUtil.getEmail(token);
         String role = jwtUtil.getRole(token);
+        System.out.println("JWTFilter 클래스: "+email+ " "+role);
 
         //userEntity를 생성하여 값 set
         User userEntity = new User();

@@ -3,6 +3,7 @@ package com.project.echoproject.dto;
 public class LoginDTO {
     private String email;
     private String password;
+    private String role;
 
     // Getters and setters
     public String getEmail() {
@@ -19,5 +20,13 @@ public class LoginDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

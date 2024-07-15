@@ -1,10 +1,11 @@
 package com.project.echoproject.dto;
 
-public class JoinDTO {
+public class UserDTO {
     private String username;
     private String email;
     private String password;
     private String role;
+    private String department;
 
     public String getUsername() {
         return username;
@@ -36,5 +37,13 @@ public class JoinDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }
