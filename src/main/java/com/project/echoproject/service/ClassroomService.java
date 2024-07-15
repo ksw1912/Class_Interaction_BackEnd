@@ -20,6 +20,7 @@ public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
     private final InstructorRepository instructorRepository;
+
     @Autowired
     public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository) {
         this.classroomRepository = classroomRepository;
@@ -29,16 +30,19 @@ public class ClassroomService {
     @Transactional
     public Classroom createClassroom(ClassroomDTO classroomDTO, String email) {
         String className = classroomDTO.getClassName();
-        Instructor instructor = instructorRepository.findByEmail(email);
-
-        if (isClassNameDuplicate(classroomDTO.getClassName())) {
-            throw new IllegalArgumentException("Class name already exists");
+        System.out.println("instrctor test");
+        System.out.println(className);
+        if (isClassNameDuplicate(className)) {
+            System.out.println("classroomDB 중복");
+            throw new IllegalArgumentException("클래스룸이 이미 존재합니다.");
         }
+        System.out.println("testwtest");
         // Classroom 객체 생성 및 저장
+        Instructor instructor = instructorRepository.findByEmail(email);
         Classroom classroom = new Classroom();
         classroom.setClassName(className);
         classroom.setInstructor(instructor);
-
+        System.out.println("레포지토리 직전");
         return classroomRepository.save(classroom);
     }
 
@@ -79,9 +83,11 @@ public class ClassroomService {
     public boolean isClassNameDuplicate(String className) {
         return classroomRepository.existsByClassName(className);
     }
+
     public boolean isClassIdDuplicate(UUID classId) {
         return classroomRepository.existsByClassId(classId);
     }
+
     @Transactional(readOnly = true)
     public Optional<Classroom> getClassroomById(UUID classId) {
         return classroomRepository.findById(classId);

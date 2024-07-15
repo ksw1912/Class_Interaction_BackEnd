@@ -31,10 +31,8 @@ public class ClassroomController {
 
     @PostMapping
     public Classroom createClassroom(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
-        System.out.println("createClassroom 메서드가 호출");
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
-        System.out.println("토큰 email: "+email);
         return classroomService.createClassroom(classroomDTO,email);
     }
 //    // 특정 교수의 이메일로 클래스룸 목록 가져오기
