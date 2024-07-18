@@ -1,4 +1,4 @@
-package com.project.echoproject.dto;
+package com.project.echoproject.dto.classroom;
 
 import java.util.List;
 import java.util.UUID;
