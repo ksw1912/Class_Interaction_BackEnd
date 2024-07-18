@@ -1,5 +1,6 @@
 package com.project.echoproject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -19,6 +20,7 @@ public class User {
 
     private String username;
     private String email;
+
     private String password;
     private String role;
 
