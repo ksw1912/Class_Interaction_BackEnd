@@ -92,7 +92,5 @@ public class StompHandler implements ChannelInterceptor {
         System.out.println("사용자 퇴장");
     }
 
-    public String getToken(){
 
-    }
 }
