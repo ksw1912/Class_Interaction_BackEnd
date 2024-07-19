@@ -20,7 +20,7 @@ public class Classroom {
             name = "classId",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @Column(updatable = false, nullable = false)
     private UUID classId;
     @ManyToOne //many: 클래스룸 one: 교육자
     @JoinColumn(name = "instructor_id", nullable = false)

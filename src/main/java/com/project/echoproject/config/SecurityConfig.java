@@ -89,7 +89,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join"
+                        .requestMatchers("/login", "/", "/join" ,"/checkEmail"
                         ).permitAll() //모든 권한
                         .requestMatchers("/instructor/").hasRole("instructor") //admin만
                         .anyRequest().authenticated());

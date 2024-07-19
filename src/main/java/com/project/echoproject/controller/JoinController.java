@@ -27,4 +27,20 @@ public class JoinController {
             return new ResponseEntity<>(new ApiResponse(e.getMessage()), HttpStatus.CONFLICT);
         }
     }
+
+    @PostMapping("/checkEmail")
+    public ResponseEntity<ApiResponse> checkEmail(@RequestBody UserDTO userDTO){
+        try {
+            joinService.checkEmail(userDTO);
+            return new ResponseEntity<>(new ApiResponse("이메일사용가능"), HttpStatus.OK);
+
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage()), HttpStatus.CONFLICT);
+        }
+    }
+
+
+
+
+
 }
