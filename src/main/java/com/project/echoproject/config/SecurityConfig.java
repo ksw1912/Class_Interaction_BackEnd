@@ -91,6 +91,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join","/classroomEnter/**"
                         ).permitAll() //모든 권한
+//                        .requestMatchers("/classroomEnter/**").authenticated()
                         .requestMatchers("/instructor/").hasRole("instructor") //admin만
                         .anyRequest().authenticated());
 
