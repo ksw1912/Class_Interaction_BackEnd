@@ -14,6 +14,6 @@ public class WebSocketController {
     @SendTo("/topic/classroom/{classroomId}")
     public MessageDTO greeting(@DestinationVariable String classroomId , MessageDTO message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        return new MessageDTO(HtmlUtils.htmlEscape(message.getContent()));
+        return new MessageDTO(message.getContent());
     }
 }
