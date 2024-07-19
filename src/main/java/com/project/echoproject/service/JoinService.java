@@ -57,4 +57,20 @@ public class JoinService {
             throw new IllegalStateException("유효하지 않은 역할입니다: " + role);
         }
     }
+
+    public void checkEmail(UserDTO userDTO) {
+        String email = userDTO.getEmail();
+        Boolean isExist = userRepository.existsByEmail(email);
+
+        if (!isExist) {
+            System.out.println("이메일: "+ email);
+            throw new IllegalStateException("사용가능한 이메일입니다.: " + email);
+        }
+
+         else {
+            System.out.println("이메일중복스: "+ email);
+           // throw new IllegalStateException("사용가능한 이메일입니다: " + email);
+        }
+    }
+
 }
