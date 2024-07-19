@@ -39,7 +39,7 @@ public class ClassroomController {
         List<Opinion> ops = opinionService.createOrUpdateOpinion(classroom,classroomDTO);
         return new ClassroomResultDTO(classroom,ops);
     }
-    @PostMapping("/opinons/update")
+    @PutMapping("/opinons/update")
     public List<Opinion>  updateOpinions(@RequestBody UpdateOpinionDTO updateOpinionDTO, @RequestHeader("Authorization") String token){
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
@@ -52,6 +52,7 @@ public class ClassroomController {
         classroomService.deleteClassroom(id);
         return new ApiResponse("수업 삭제 성공");
     }
+
 //    // 특정 교수의 이메일로 클래스룸 목록 가져오기
 //    @GetMapping("/instructor/{email}")
 //    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {

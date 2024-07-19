@@ -15,15 +15,20 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompHandler implements ChannelInterceptor {
     private JWTUtil jwtUtil;
+    private String token;
 
     public StompHandler(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -33,22 +38,26 @@ public class StompHandler implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            String token = String.valueOf(accessor.getHeader("Authorization"));
-            System.out.println(accessor.getHeader("Authorization"));
-            System.out.println(accessor.getNativeHeader("Authorization"));
+            token = String.valueOf(accessor.getNativeHeader("Authorization"));
+
             System.out.println("websocket :" +token);
-            if (token == null || !token.startsWith("Bearer ")) {
+
+            if (token == null) {
                 System.out.println("웹소켓에서 토큰이없음");
                 throw new IllegalArgumentException("토큰 X");
             }
+
             token = token.split(" ")[1];
+            token = token.substring(0,token.length()-1);
+
+            System.out.println("토큰 분리: "+token);
             if (jwtUtil.isExpired(token)) {
                 System.out.println("토큰 expired");
                 throw new IllegalArgumentException("토큰 expired");
             }
             String email = jwtUtil.getEmail(token);
             String role = jwtUtil.getRole(token);
-            System.out.println("JWTFilter 클래스: " + email + " " + role);
+            System.out.println("stompHandler: " + email + " " + role);
 
             //userEntity를 생성하여 값 set
             User userEntity = new User();
@@ -69,6 +78,12 @@ public class StompHandler implements ChannelInterceptor {
 
     @EventListener
     public void handleWebSocketConnectionListener(SessionConnectedEvent event) {
+        String email = jwtUtil.getEmail(token);
+        // email 사용자 입장 인원 추가
+        //
+
+
+
         System.out.println("사용자 입장");
     }
 
@@ -77,4 +92,7 @@ public class StompHandler implements ChannelInterceptor {
         System.out.println("사용자 퇴장");
     }
 
+    public String getToken(){
+
+    }
 }
