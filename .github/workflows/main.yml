@@ -1,0 +1,76 @@
+name: CICD
+run-name: Running
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-northeast-2
+  AWS_S3_BUCKET: makeclassfile
+  AWS_CODE_DEPLOY_APPLICATION: cicd-class-interaction
+  AWS_CODE_DEPLOY_GROUP: cicd-class-interaction-group
+
+jobs:
+  build-with-gradle:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test # 테스트 Skip
+
+    # 디렉토리 생성
+    - name: Make Directory
+      run: mkdir -p deploy
+        
+    # Jar 파일 복사
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy
+
+    # appspec.yml 파일 복사
+    - name: Copy appspec.yml
+      run: cp ./appspec.yml ./deploy
+
+    # script files 복사
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+
+    - name: Make zip file
+      run: zip -r ./sebadog.zip ./deploy
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./sebadog.zip s3://${{ env.AWS_S3_BUCKET }}/sebadog.zip
+
+    # Deploy
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+      run: |
+        aws deploy create-deployment \
+          --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
+          --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=${{ env.AWS_S3_BUCKET }},bundleType=zip,key=sebadog.zip \
+          --region ${{ env.AWS_REGION }}

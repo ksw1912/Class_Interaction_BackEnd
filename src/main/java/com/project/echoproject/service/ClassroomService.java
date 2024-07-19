@@ -2,11 +2,9 @@ package com.project.echoproject.service;
 
 import com.project.echoproject.domain.Classroom;
 import com.project.echoproject.domain.Instructor;
-import com.project.echoproject.domain.User;
-import com.project.echoproject.dto.ClassroomDTO;
+import com.project.echoproject.dto.classroom.ClassroomDTO;
 import com.project.echoproject.repository.ClassroomRepository;
 import com.project.echoproject.repository.InstructorRepository;
-import com.project.echoproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,19 +28,16 @@ public class ClassroomService {
     @Transactional
     public Classroom createClassroom(ClassroomDTO classroomDTO, String email) {
         String className = classroomDTO.getClassName();
-        System.out.println("instrctor test");
-        System.out.println(className);
         if (isClassNameDuplicate(className)) {
             System.out.println("classroomDB 중복");
             throw new IllegalArgumentException("클래스룸이 이미 존재합니다.");
         }
-        System.out.println("testwtest");
         // Classroom 객체 생성 및 저장
         Instructor instructor = instructorRepository.findByEmail(email);
         Classroom classroom = new Classroom();
         classroom.setClassName(className);
         classroom.setInstructor(instructor);
-        System.out.println("레포지토리 직전");
+
         return classroomRepository.save(classroom);
     }
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +26,10 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Student student;
-    private LocalDate date;
+    private LocalDate createAt;
+    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+
 
     public UUID getEnrollmentID() {
         return enrollmentID;
@@ -51,21 +55,27 @@ public class Enrollment {
         this.student = student;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCreateAt() {
+        return createAt;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCreateAt(LocalDate createAt) {
+        this.createAt = createAt;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.date = LocalDate.now();
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.date = LocalDate.now();
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

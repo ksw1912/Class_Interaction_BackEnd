@@ -1,17 +1,16 @@
 package com.project.echoproject.controller;
 
 import com.project.echoproject.domain.Classroom;
+import com.project.echoproject.domain.Opinion;
 import com.project.echoproject.dto.ApiResponse;
-import com.project.echoproject.dto.ClassroomDTO;
-import com.project.echoproject.dto.websocketDTO.MessageDTO;
+import com.project.echoproject.dto.classroom.ClassroomDTO;
+import com.project.echoproject.dto.classroom.ClassroomResultDTO;
+import com.project.echoproject.dto.classroom.UpdateOpinionDTO;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.ClassroomService;
+import com.project.echoproject.service.OpinionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,19 +21,38 @@ import java.util.UUID;
 public class ClassroomController {
 
     private final ClassroomService classroomService;
+    private final OpinionService opinionService;
     private final JWTUtil jwtUtil;
     @Autowired
-    public ClassroomController(ClassroomService classroomService ,JWTUtil jwtUtil) {
+    public ClassroomController(ClassroomService classroomService ,JWTUtil jwtUtil,OpinionService opinionService) {
         this.classroomService = classroomService;
         this.jwtUtil = jwtUtil;
+        this.opinionService = opinionService;
     }
 
     @PostMapping
-    public Classroom createClassroom(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
+    public ClassroomResultDTO createClassroomAndQuiz(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
-        return classroomService.createClassroom(classroomDTO,email);
+
+        Classroom classroom = classroomService.createClassroom(classroomDTO,email);
+        List<Opinion> ops = opinionService.createOrUpdateOpinion(classroom,classroomDTO);
+        return new ClassroomResultDTO(classroom,ops);
     }
+    @PutMapping("/opinons/update")
+    public List<Opinion>  updateOpinions(@RequestBody UpdateOpinionDTO updateOpinionDTO, @RequestHeader("Authorization") String token){
+        String jwtToken = token.substring(7);
+        String email = jwtUtil.getEmail(jwtToken);
+        Optional<Classroom> classroom = classroomService.getClassroomById(updateOpinionDTO.getClassId());
+        return opinionService.UpdateOpinion(updateOpinionDTO,email,classroom);
+    }
+
+    @DeleteMapping("/classDelete/{id}")
+    public ApiResponse deleteClassroom(@PathVariable UUID id) {
+        classroomService.deleteClassroom(id);
+        return new ApiResponse("수업 삭제 성공");
+    }
+
 //    // 특정 교수의 이메일로 클래스룸 목록 가져오기
 //    @GetMapping("/instructor/{email}")
 //    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {
@@ -56,11 +74,6 @@ public class ClassroomController {
 //    @GetMapping("/{className}")
 //    public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
 //        return classroomService.getClassroomByClassName(className);
-//    }
-//    @DeleteMapping("/classroomDelete/{id}")
-//    public ApiResponse deleteClassroom(@PathVariable UUID id) {
-//        classroomService.deleteClassroom(id);
-//        return new ApiResponse("수업 삭제 성공");
 //    }
 
 //    @PutMapping("/{id}")
