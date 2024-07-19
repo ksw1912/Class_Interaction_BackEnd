@@ -82,8 +82,6 @@ public class StompHandler implements ChannelInterceptor {
         // email 사용자 입장 인원 추가
         //
 
-
-
         System.out.println("사용자 입장");
     }
 
