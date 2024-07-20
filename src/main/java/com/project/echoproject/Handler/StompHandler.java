@@ -33,12 +33,11 @@ public class StompHandler implements ChannelInterceptor {
     private JWTUtil jwtUtil;
     private String token;
     private WebsocketService websocketService;
-    private SimpMessageSendingOperations messagingTemplate;
+//    private SimpMessageSendingOperations messagingTemplate;
 
-    public StompHandler(JWTUtil jwtUtil, WebsocketService websocketService, SimpMessageSendingOperations messagingTemplate) {
+    public StompHandler(JWTUtil jwtUtil, WebsocketService websocketService) {
         this.jwtUtil = jwtUtil;
         this.websocketService = websocketService;
-        this.messagingTemplate = messagingTemplate;
     }
 
 
@@ -84,26 +83,26 @@ public class StompHandler implements ChannelInterceptor {
         return message;
     }
 
-    @EventListener
-    public void handleWebSocketConnectionListener(SessionConnectedEvent event) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-        String email = jwtUtil.getEmail(token);
-        String role = jwtUtil.getRole(token);
-        String classIdString = accessor.getFirstNativeHeader("classId");
-        UUID classId = UUID.fromString(classIdString);
-
-        //교육자일경우 방생성
-        if(role.equals("instructor")){
-            websocketService.createRoom(classId);
-        }
-        // email 사용자 입장 인원 추가
-        websocketService.addUserEmail(classId, email);
-        //사용자 인원 불러오기
-        int userCount = websocketService.getUserCountInRoom(classId);
-        //사용자 정보 보내주기
-        messagingTemplate.convertAndSend("/topic/" + classId+"/classMember", websocketService.getRooms(classId));
-        System.out.println("사용자 입장");
-    }
+//    @EventListener
+//    public void handleWebSocketConnectionListener(SessionConnectedEvent event) {
+//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+//        String email = jwtUtil.getEmail(token);
+//        String role = jwtUtil.getRole(token);
+//        String classIdString = accessor.getFirstNativeHeader("classId");
+//        UUID classId = UUID.fromString(classIdString);
+//
+//        //교육자일경우 방생성
+//        if(role.equals("instructor")){
+//            websocketService.createRoom(classId);
+//        }
+//        // email 사용자 입장 인원 추가
+//        websocketService.addUserEmail(classId, email);
+//        //사용자 인원 불러오기
+//        int userCount = websocketService.getUserCountInRoom(classId);
+//        //사용자 정보 보내주기
+//        messagingTemplate.convertAndSend("/topic/" + classId+"/classMember", websocketService.getRooms(classId));
+//        System.out.println("사용자 입장");
+//    }
 
     @EventListener
     public void handleWebSocketDisconnectionListener(SessionDisconnectEvent event) {
