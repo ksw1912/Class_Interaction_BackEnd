@@ -21,7 +21,9 @@ public class WebsocketService {
     }
 
     public void addUserEmail(UUID classId, String email) {
-        rooms.get(classId).getUserEmails().add(email);
+        if(rooms.get(email) != null) {
+            rooms.get(classId).getUserEmails().add(email);
+        }
     }
 
     public void removeUserEmailFromRoom(UUID classId, String email) {
@@ -36,5 +38,11 @@ public class WebsocketService {
         }
     }
 
+    public int getUserCountInRoom(UUID classId){
+        return rooms.get(classId).getUserEmails().size();
+    }
 
+    public ClassDTO getRooms(UUID classId){
+        return rooms.get(classId);
+    }
 }
