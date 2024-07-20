@@ -3,7 +3,7 @@
 REPOSITORY=/home/ubuntu/app
 
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
-PORT=8080
+PORT=8082
 CURRENT_PID=$(sudo lsof -t -i:$PORT)
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
