@@ -40,9 +40,9 @@ public class StompHandler implements ChannelInterceptor {
         this.websocketService = websocketService;
     }
 
-
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
+        System.out.println("presend 실행");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             token = String.valueOf(accessor.getNativeHeader("Authorization"));

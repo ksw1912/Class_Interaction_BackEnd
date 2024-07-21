@@ -1,6 +1,7 @@
 package com.project.echoproject.config;
 
 import com.project.echoproject.Handler.StompHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -26,6 +27,7 @@ import java.util.Collections;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final StompHandler stompHandler;
 
+    @Autowired
     public WebSocketConfig(StompHandler stompHandler) {
         this.stompHandler = stompHandler;
     }

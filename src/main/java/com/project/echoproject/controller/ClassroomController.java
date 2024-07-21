@@ -29,6 +29,13 @@ public class ClassroomController {
         this.jwtUtil = jwtUtil;
         this.opinionService = opinionService;
     }
+    //학생 or 교수 특정 수업 입장
+    @GetMapping("/classroomEnter/{classId}")
+    public ClassroomResultDTO classroomEnter(@PathVariable UUID classId){
+        Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
+        List<Opinion> opinions = opinionService.findOpinionId(classId);
+        return new ClassroomResultDTO(classroom,opinions);
+    }
 
     @PostMapping
     public ClassroomResultDTO createClassroomAndQuiz(@RequestBody ClassroomDTO classroomDTO, @RequestHeader("Authorization") String token) {
@@ -39,7 +46,7 @@ public class ClassroomController {
         List<Opinion> ops = opinionService.createOrUpdateOpinion(classroom,classroomDTO);
         return new ClassroomResultDTO(classroom,ops);
     }
-    @PutMapping("/opinons/update")
+    @PutMapping("/opinions/update")
     public List<Opinion>  updateOpinions(@RequestBody UpdateOpinionDTO updateOpinionDTO, @RequestHeader("Authorization") String token){
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
@@ -51,6 +58,11 @@ public class ClassroomController {
     public ApiResponse deleteClassroom(@PathVariable UUID id) {
         classroomService.deleteClassroom(id);
         return new ApiResponse("수업 삭제 성공");
+    }
+
+    @GetMapping("/opinionSelect/{classId}")
+    public List<Opinion> getOpinion(@PathVariable UUID classId){
+        return  opinionService.findOpinionId(classId);
     }
 
 //    // 특정 교수의 이메일로 클래스룸 목록 가져오기

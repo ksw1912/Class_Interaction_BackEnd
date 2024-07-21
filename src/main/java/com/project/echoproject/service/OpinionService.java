@@ -62,6 +62,10 @@ public class OpinionService {
                 })
                 .collect(Collectors.toList());
     }
+    @Transactional(readOnly = true)
+    public List<Opinion> findOpinionId(UUID classId){
+        return opinionRepository.findByClassroomClassId(classId);
+    }
 
 }
 
