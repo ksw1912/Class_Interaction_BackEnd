@@ -18,6 +18,7 @@ public class Opinion {
     @Column(updatable = false, nullable = false)
     private UUID opinionId;
 
+
     @ManyToOne
     @JoinColumn(name="class_id")
     private Classroom classroom;
