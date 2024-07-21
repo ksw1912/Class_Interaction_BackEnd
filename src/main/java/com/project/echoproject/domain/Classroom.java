@@ -10,6 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "classroom") //테이블명: classroom
@@ -34,6 +36,11 @@ public class Classroom {
     @Column
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Opinion> opinions = new HashSet<>();
+
+
     private LocalDateTime updatedAt;
 
     public LocalDateTime getCreatedAt() {

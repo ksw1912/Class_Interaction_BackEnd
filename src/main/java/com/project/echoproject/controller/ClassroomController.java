@@ -30,7 +30,7 @@ public class ClassroomController {
         this.opinionService = opinionService;
     }
     //학생 or 교수 특정 수업 입장
-    @GetMapping("/classroomEnter/{classId}")
+    @PostMapping("/classroomEnter/{classId}")
     public ClassroomResultDTO classroomEnter(@PathVariable UUID classId){
         Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
         List<Opinion> opinions = opinionService.findOpinionId(classId);
