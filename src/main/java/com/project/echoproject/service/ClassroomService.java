@@ -12,17 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
     private final InstructorRepository instructorRepository;
-
+    private final ScheduledExecutorService scheduledExecutorService;
+    private final ConcurrentHashMap<String, UUID> pinMapping = new ConcurrentHashMap<>();
     @Autowired
-    public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository) {
+    public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository, ScheduledExecutorService scheduledExecutorService) {
         this.classroomRepository = classroomRepository;
         this.instructorRepository = instructorRepository;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
     @Transactional
@@ -86,5 +91,16 @@ public class ClassroomService {
     @Transactional(readOnly = true)
     public Optional<Classroom> getClassroomById(UUID classId) {
         return classroomRepository.findById(classId);
+    }
+
+    public void createPinMapping(String classNumber, UUID classId) {
+        pinMapping.put(classNumber, classId);
+        scheduledExecutorService.schedule(() -> {
+            pinMapping.remove(classNumber);
+        }, 30, TimeUnit.MINUTES);
+    }
+
+    public ConcurrentHashMap<String, UUID> getMapping() {
+        return pinMapping;
     }
 }
