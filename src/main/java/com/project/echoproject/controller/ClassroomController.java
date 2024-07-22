@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentMap;
 @RestController //api로 보내는 어노테이션임
 @RequestMapping("/classrooms")
 public class ClassroomController {
-    Map<String,UUID> mapping = new HashMap<>();
     private final ClassroomService classroomService;
     private final OpinionService opinionService;
     private final JWTUtil jwtUtil;
@@ -37,7 +36,7 @@ public class ClassroomController {
 
     @GetMapping("/classroomEnter/pin/{classNumber}")
     public ClassroomResultDTO classroomEnter(@PathVariable String classNumber){
-        UUID classId = mapping.get(classNumber);
+        UUID classId = classroomService.getMapping().get(classNumber);
         Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
         List<Opinion> opinions = opinionService.findOpinionId(classId);
         return new ClassroomResultDTO(classroom,opinions);

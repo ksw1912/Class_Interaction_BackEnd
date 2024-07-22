@@ -97,6 +97,7 @@ public class ClassroomService {
         pinMapping.put(classNumber, classId);
         scheduledExecutorService.schedule(() -> {
             pinMapping.remove(classNumber);
+            scheduledExecutorService.shutdown();
         }, 30, TimeUnit.MINUTES);
     }
 
