@@ -10,8 +10,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class WebsocketService {
+
     private Map<UUID, ClassDTO> rooms = new ConcurrentHashMap<>();
 
+    public Map<UUID, ClassDTO> getRooms() {
+        return rooms;
+    }
     public boolean roomExists(UUID classId) {
         return rooms.containsKey(classId);
     }
@@ -42,7 +46,9 @@ public class WebsocketService {
         return rooms.get(classId).getUserEmails().size();
     }
 
-    public ClassDTO getRooms(UUID classId){
-        return rooms.get(classId);
-    }
+//    public ClassDTO getRooms(UUID classId){
+//        return rooms.get(classId);
+//    }
+
+
 }

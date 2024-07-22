@@ -13,7 +13,6 @@ public class WebSocketController {
     @MessageMapping("/classroom/{classroomId}/message")
     @SendTo("/topic/classroom/{classroomId}")
     public MessageDTO greeting(@DestinationVariable String classroomId , MessageDTO message) throws Exception {
-
         Thread.sleep(1000); // simulated delay
         return new MessageDTO(message.getContent());
     }

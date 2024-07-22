@@ -43,9 +43,6 @@ public class Classroom {
     @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Opinion> opinions = new HashSet<>();
 
-
-
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

@@ -40,8 +40,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*")
-                .withSockJS();
+        registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*");
+//                .withSockJS();
 //        registry.setErrorHandler(chatErrorHandler); 예외처리 만들기
 
     }
