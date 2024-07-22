@@ -4,10 +4,7 @@ package com.project.echoproject.config;
 import com.project.echoproject.jwt.JWTFilter;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.jwt.LoginFilter;
-import com.project.echoproject.repository.ClassroomRepository;
-import com.project.echoproject.repository.InstructorRepository;
-import com.project.echoproject.repository.StudentRepository;
-import com.project.echoproject.repository.UserRepository;
+import com.project.echoproject.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,16 +32,17 @@ public class SecurityConfig {
     private final ClassroomRepository classroomRepository;
     private final StudentRepository studentRepository;
     private final InstructorRepository instructorRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, ClassroomRepository classroomRepository, InstructorRepository instructorRepository1) {
-
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, ClassroomRepository classroomRepository, InstructorRepository instructorRepository1,EnrollmentRepository enrollmentRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
         this.classroomRepository = classroomRepository;
         this.instructorRepository = instructorRepository1;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     //AuthenticationManager Bean 등록
@@ -98,7 +96,7 @@ public class SecurityConfig {
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,userRepository,classroomRepository,studentRepository, instructorRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,userRepository,classroomRepository,studentRepository, instructorRepository,enrollmentRepository), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .sessionManagement((session) -> session

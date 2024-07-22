@@ -2,14 +2,13 @@ package com.project.echoproject.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.echoproject.domain.Classroom;
+import com.project.echoproject.domain.Enrollment;
 import com.project.echoproject.domain.User;
 import com.project.echoproject.dto.CustomUserDetails;
 import com.project.echoproject.dto.InstructorResponseDTO;
 import com.project.echoproject.dto.LoginDTO;
-import com.project.echoproject.repository.ClassroomRepository;
-import com.project.echoproject.repository.InstructorRepository;
-import com.project.echoproject.repository.StudentRepository;
-import com.project.echoproject.repository.UserRepository;
+import com.project.echoproject.dto.StudentResponseDTO;
+import com.project.echoproject.repository.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,9 +28,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final ClassroomRepository classroomRepository;
     private final StudentRepository studentRepository;
     private final InstructorRepository instructorRepository;
+    private final EnrollmentRepository enrollmentRepository;
     private final JWTUtil jwtUtil;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository, ClassroomRepository classroomRepository, StudentRepository studentRepository, InstructorRepository instructorRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository, ClassroomRepository classroomRepository, StudentRepository studentRepository, InstructorRepository instructorRepository,EnrollmentRepository enrollmentRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -41,6 +41,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //setFilterProcessesUrl("/login");
         this.studentRepository = studentRepository;
         this.instructorRepository = instructorRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -83,7 +84,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         if(role.equals("student")){
             user = studentRepository.findByEmail(email);
             user.setPassword(null);
-            response.getWriter().write(new ObjectMapper().writeValueAsString(user));
+            List<Enrollment> enrollments = enrollmentRepository.findByStudentEmail(email);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(new StudentResponseDTO(user,enrollments)));
         }
         else if(role.equals("instructor")){
             user = instructorRepository.findByEmail(email);

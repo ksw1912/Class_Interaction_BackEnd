@@ -1,5 +1,9 @@
 package com.project.echoproject.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -9,11 +13,10 @@ import java.util.UUID;
 
 @Entity
 public class Enrollment {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "enrollmentID",
+            name = "enrollmentId",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(updatable = false, nullable = false)
@@ -21,13 +24,18 @@ public class Enrollment {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Classroom Classroom;
+    private Classroom classroom;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private Student student;
-    private LocalDate createAt;
+    @Column
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime updateAt;
+    @Column
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdAt;
 
 
@@ -39,12 +47,12 @@ public class Enrollment {
         this.enrollmentID = enrollmentID;
     }
 
-    public com.project.echoproject.domain.Classroom getClassroom() {
-        return Classroom;
+    public Classroom getClassroom() {
+        return classroom;
     }
 
-    public void setClassroom(com.project.echoproject.domain.Classroom classroom) {
-        Classroom = classroom;
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
     }
 
     public Student getStudent() {
@@ -53,14 +61,6 @@ public class Enrollment {
 
     public void setStudent(Student student) {
         this.student = student;
-    }
-
-    public LocalDate getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(LocalDate createAt) {
-        this.createAt = createAt;
     }
 
     public LocalDateTime getUpdateAt() {
