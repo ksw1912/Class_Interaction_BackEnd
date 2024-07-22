@@ -62,6 +62,8 @@ public class StompHandler implements ChannelInterceptor {
             }
             String email = jwtUtil.getEmail(token);
             String role = jwtUtil.getRole(token);
+            accessor.getSessionAttributes().put(accessor.getSessionId()+"email", email);
+            accessor.getSessionAttributes().put(accessor.getSessionId()+"role", role);
             System.out.println("stompHandler: " + email + " " + role);
 
             //userEntity를 생성하여 값 set

@@ -23,10 +23,14 @@ public class WebsocketService {
     public void createRoom(UUID classId) {
         rooms.putIfAbsent(classId, new ClassDTO(classId, true));
     }
-
+    public void closeRoom(UUID classId){
+        rooms.remove(classId);
+    }
     public void addUserEmail(UUID classId, String email) {
-        if(rooms.get(email) != null) {
-            rooms.get(classId).getUserEmails().add(email);
+        if(rooms.get(classId) != null) {
+            if(!rooms.get(classId).getUserEmails().contains(email)){
+                rooms.get(classId).getUserEmails().add(email);
+            }
         }
     }
 
@@ -34,7 +38,7 @@ public class WebsocketService {
         ClassDTO classDTO = rooms.get(classId);
         if (classDTO != null) {
             Set<String> userEmails = classDTO.getUserEmails();
-            userEmails.remove("email");
+            userEmails.remove(email);
             classDTO.setUserEmails(userEmails);
             if (classDTO.getUserEmails().isEmpty()) {
                 rooms.remove(classId);
@@ -45,6 +49,7 @@ public class WebsocketService {
     public int getUserCountInRoom(UUID classId){
         return rooms.get(classId).getUserEmails().size();
     }
+
 
 //    public ClassDTO getRooms(UUID classId){
 //        return rooms.get(classId);
