@@ -1,6 +1,7 @@
 package com.project.echoproject.service;
 
 import com.project.echoproject.dto.websocketDTO.ClassDTO;
+import com.project.echoproject.dto.websocketDTO.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -11,9 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class WebsocketService {
 
-    private Map<UUID, ClassDTO> rooms = new ConcurrentHashMap<>();
+    private Map<UUID, MessageDTO> rooms = new ConcurrentHashMap<>();
 
-    public Map<UUID, ClassDTO> getRooms() {
+    public Map<UUID, MessageDTO> getRooms() {
         return rooms;
     }
     public boolean roomExists(UUID classId) {
@@ -21,30 +22,29 @@ public class WebsocketService {
     }
 
     public void createRoom(UUID classId) {
-        rooms.putIfAbsent(classId, new ClassDTO(classId, true));
+        rooms.putIfAbsent(classId,new MessageDTO(MessageDTO.Status.OPEN,null,null,0,classId,true));
     }
     public void closeRoom(UUID classId){
         rooms.remove(classId);
     }
     public void addUserEmail(UUID classId, String email) {
         if(rooms.get(classId) != null) {
-            if(!rooms.get(classId).getUserEmails().contains(email)){
-                rooms.get(classId).getUserEmails().add(email);
-            }
+            rooms.get(classId).getUserEmails().add(email);
         }
     }
 
     public void removeUserEmailFromRoom(UUID classId, String email) {
-        ClassDTO classDTO = rooms.get(classId);
-        if (classDTO != null) {
-            Set<String> userEmails = classDTO.getUserEmails();
+        MessageDTO MessageDTO = rooms.get(classId);
+        if (MessageDTO != null) {
+            Set<String> userEmails = MessageDTO.getUserEmails();
             userEmails.remove(email);
-            classDTO.setUserEmails(userEmails);
-            if (classDTO.getUserEmails().isEmpty()) {
+            MessageDTO.setUserEmails(userEmails);
+            if (MessageDTO.getUserEmails().isEmpty()) {
                 rooms.remove(classId);
             }
         }
     }
+
 
     public int getUserCountInRoom(UUID classId){
         return rooms.get(classId).getUserEmails().size();

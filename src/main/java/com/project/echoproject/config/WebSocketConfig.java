@@ -34,14 +34,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
-        config.setApplicationDestinationPrefixes("/app"); //접두사
+        config.enableSimpleBroker("/sub");
+        config.setApplicationDestinationPrefixes("/pub"); //접두사
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*");
-//                .withSockJS();
+        registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*")
+                .withSockJS();
 //        registry.setErrorHandler(chatErrorHandler); 예외처리 만들기
 
     }

@@ -68,11 +68,11 @@ public class WebSocketEventListener {
         if (role.equals("student")) {
             websocketService.removeUserEmailFromRoom(classId, email);
             System.out.println("사용자 퇴장");
-            messagingTemplate.convertAndSend("/topic/classroom/" + classId, websocketService.getUserCountInRoom(classId));
+            messagingTemplate.convertAndSend("/sub/classroom/" + classId, websocketService.getUserCountInRoom(classId));
         } else {
             websocketService.closeRoom(classId);
             System.out.println("방삭제");
-            messagingTemplate.convertAndSend("/topic/classroom/" + classId, "close");
+            messagingTemplate.convertAndSend("/sub/classroom/" + classId, "close");
         }
         accessor.getSessionAttributes().remove(accessor.getSessionId()+"email");
         accessor.getSessionAttributes().remove(accessor.getSessionId()+"role");
