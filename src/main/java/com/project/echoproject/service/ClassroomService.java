@@ -61,18 +61,15 @@ public class ClassroomService {
         return classroomRepository.findAll();
     }
 
-    //정확 X
-//    @Transactional
-//    public Classroom updateClassroom(Long id, Classroom updatedClassroom) {
-//        return classroomRepository.findById(id)
-//                .map(classroom -> {
-//                    classroom.setClassName(updatedClassroom.getClassName());
-//                    classroom.setProfessorName(updatedClassroom.getProfessorName());
-//                    classroom.setProfessor(updatedClassroom.getProfessor());
-//                    return classroomRepository.save(classroom);
-//                })
-//                .orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
-//    }
+    @Transactional
+    public Classroom updateClassroom(Classroom classroom) {
+       UUID classId = classroom.getClassId();
+       if(classroomRepository.existsByClassId(classId)){
+           classroomRepository.deleteById(classId);
+           return classroomRepository.save(classroom);
+       }
+       throw new IllegalArgumentException("classroom이 존재 X");
+    }
 
     @Transactional
     public void deleteClassroom(UUID id) {

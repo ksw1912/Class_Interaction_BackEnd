@@ -3,7 +3,7 @@ package com.project.echoproject.service;
 import com.project.echoproject.domain.Classroom;
 import com.project.echoproject.domain.Opinion;
 import com.project.echoproject.dto.classroom.ClassroomDTO;
-import com.project.echoproject.dto.classroom.UpdateOpinionDTO;
+import com.project.echoproject.dto.classroom.UpdateClassroomDTO;
 import com.project.echoproject.repository.ClassroomRepository;
 import com.project.echoproject.repository.OpinionRepository;
 import org.springframework.stereotype.Service;
@@ -44,19 +44,17 @@ public class OpinionService {
     }
 
     @Transactional
-    public List<Opinion> UpdateOpinion(UpdateOpinionDTO updateOpinionDTO,String email, Optional<Classroom> classroomOpt){
-        UUID classId = updateOpinionDTO.getClassId();
-        List<String> opList = updateOpinionDTO.getOpinion();
-        Classroom classroom = classroomOpt.orElseThrow(() -> new IllegalArgumentException("claassroom을 찾을 수 없습니다"));
+    public List<Opinion> UpdateOpinion(UpdateClassroomDTO updateClassroomDTO, String email,Classroom room){
+        UUID classId = updateClassroomDTO.getClassroom().getClassId();
+        List<String> opList = updateClassroomDTO.getOpinion();
 
         if (opinionRepository.existsByClassroomClassId(classId)) {
             opinionRepository.deleteByClassroomClassId(classId);
         }
-
         return opList.stream()
                 .map(ops -> {
                     Opinion op = new Opinion();
-                    op.setClassroom(classroom);
+                    op.setClassroom(room);
                     op.setOpinion(ops);
                     return opinionRepository.save(op);
                 })

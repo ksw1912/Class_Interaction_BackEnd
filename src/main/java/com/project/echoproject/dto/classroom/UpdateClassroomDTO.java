@@ -1,18 +1,20 @@
 package com.project.echoproject.dto.classroom;
 
+import com.project.echoproject.domain.Classroom;
+
 import java.util.List;
 import java.util.UUID;
 
-public class UpdateOpinionDTO {
-    UUID classId;
+public class UpdateClassroomDTO {
+    Classroom classroom;
     List<String> opinion;
 
-    public UUID getClassId() {
-        return classId;
+    public Classroom getClassroom() {
+        return classroom;
     }
 
-    public void setClassId(UUID classId) {
-        this.classId = classId;
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
     }
 
     public List<String> getOpinion() {

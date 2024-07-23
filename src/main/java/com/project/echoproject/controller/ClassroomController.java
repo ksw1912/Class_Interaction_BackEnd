@@ -6,7 +6,8 @@ import com.project.echoproject.domain.Opinion;
 import com.project.echoproject.dto.ApiResponse;
 import com.project.echoproject.dto.classroom.ClassroomDTO;
 import com.project.echoproject.dto.classroom.ClassroomResultDTO;
-import com.project.echoproject.dto.classroom.UpdateOpinionDTO;
+import com.project.echoproject.dto.classroom.ResultUpdateClassroomDTO;
+import com.project.echoproject.dto.classroom.UpdateClassroomDTO;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.ClassroomService;
 import com.project.echoproject.service.EnrollmentService;
@@ -83,12 +84,13 @@ public class ClassroomController {
         return new ClassroomResultDTO(classroom, ops);
     }
 
-    @PutMapping("/opinions/update")
-    public List<Opinion> updateOpinions(@RequestBody UpdateOpinionDTO updateOpinionDTO, @RequestHeader("Authorization") String token) {
+    @PutMapping("/classroom/update")
+    public ResultUpdateClassroomDTO updateOpinions(@RequestBody UpdateClassroomDTO updateClassroomDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
-        Optional<Classroom> classroom = classroomService.getClassroomById(updateOpinionDTO.getClassId());
-        return opinionService.UpdateOpinion(updateOpinionDTO, email, classroom);
+        Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
+        List<Opinion> opinionList = opinionService.UpdateOpinion(updateClassroomDTO, email, classroom);
+        return new ResultUpdateClassroomDTO(classroom,opinionList);
     }
 
     @DeleteMapping("/classDelete/{id}")
