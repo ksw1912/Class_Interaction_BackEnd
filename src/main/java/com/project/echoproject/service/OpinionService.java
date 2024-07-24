@@ -9,10 +9,7 @@ import com.project.echoproject.repository.OpinionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,23 +39,31 @@ public class OpinionService {
                 .collect(Collectors.toList());
         return opinionList;
     }
-
     @Transactional
-    public List<Opinion> UpdateOpinion(UpdateClassroomDTO updateClassroomDTO, String email,Classroom room){
+    public List<Opinion> UpdateOpinion(UpdateClassroomDTO updateClassroomDTO, String email, Classroom room) {
         UUID classId = updateClassroomDTO.getClassroom().getClassId();
         List<String> opList = updateClassroomDTO.getOpinion();
+        System.out.println(updateClassroomDTO.getOpinion());
+        List<Opinion> opinionList = new ArrayList<>();
 
         if (opinionRepository.existsByClassroomClassId(classId)) {
             opinionRepository.deleteByClassroomClassId(classId);
         }
-        return opList.stream()
-                .map(ops -> {
-                    Opinion op = new Opinion();
-                    op.setClassroom(room);
-                    op.setOpinion(ops);
-                    return opinionRepository.save(op);
-                })
-                .collect(Collectors.toList());
+        for (var oa : opList) {
+            System.out.println(oa);
+        }
+
+        for (var ops : opList) {
+            if (ops == null || ops.isEmpty()) {
+                continue; // break 대신 continue 사용
+            }
+            Opinion op = new Opinion();
+            op.setOpinion(ops);
+            op.setClassroom(room);
+            opinionList.add(opinionRepository.save(op));
+        }
+        return opinionList;
+
     }
     @Transactional(readOnly = true)
     public List<Opinion> findOpinionId(UUID classId){

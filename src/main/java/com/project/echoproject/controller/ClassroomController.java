@@ -88,8 +88,10 @@ public class ClassroomController {
     public ResultUpdateClassroomDTO updateOpinions(@RequestBody UpdateClassroomDTO updateClassroomDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
+
         Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
         List<Opinion> opinionList = opinionService.UpdateOpinion(updateClassroomDTO, email, classroom);
+        System.out.print("asd" + updateClassroomDTO.getOpinion());
         return new ResultUpdateClassroomDTO(classroom,opinionList);
     }
 

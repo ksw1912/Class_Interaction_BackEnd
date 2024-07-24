@@ -63,13 +63,21 @@ public class ClassroomService {
 
     @Transactional
     public Classroom updateClassroom(Classroom classroom) {
-       UUID classId = classroom.getClassId();
-       if(classroomRepository.existsByClassId(classId)){
-           classroomRepository.deleteById(classId);
-           return classroomRepository.save(classroom);
-       }
-       throw new IllegalArgumentException("classroom이 존재 X");
+        UUID classId = classroom.getClassId();
+        if (classroomRepository.existsByClassId(classId)) {
+            // 기존 classroom을 데이터베이스에서 조회
+            Classroom existingClassroom = classroomRepository.findById(classId)
+                    .orElseThrow(() -> new IllegalArgumentException("Classroom not found"));
+
+            existingClassroom.setClassName(classroom.getClassName());
+
+
+            return classroomRepository.save(existingClassroom);
+        }
+        throw new IllegalArgumentException("Classroom does not exist");
     }
+
+
 
     @Transactional
     public void deleteClassroom(UUID id) {

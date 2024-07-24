@@ -58,7 +58,15 @@ public class WebSocketEventListener {
         String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId()+"role");
         String classIdString = accessor.getSubscriptionId();
         System.out.println("test"+ classIdString);
-        UUID classId = UUID.fromString(classIdString.split("/")[3]);
+        String[] splitResult = classIdString.split("/");
+        UUID classId = null;
+        if (splitResult.length > 3) {
+            classId = UUID.fromString(splitResult[3]);
+        } else {
+            System.out.println("Invalid subscription ID format");
+            return;
+        }
+
 
         if (email == null || role == null || classId == null) {
             System.out.println("Invalid session attributes or destination");
