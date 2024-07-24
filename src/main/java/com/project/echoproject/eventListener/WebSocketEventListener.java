@@ -35,6 +35,7 @@ public class WebSocketEventListener {
         String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
         String classIdString = accessor.getDestination();
         UUID classId = UUID.fromString(classIdString.split("/")[3]);
+        accessor.getSessionAttributes().put(accessor.getSessionId() + "classId", classId);
 
         //교육자일경우 방생성
         if (role.equals("instructor")) {
@@ -64,10 +65,10 @@ public class WebSocketEventListener {
         UUID classId = (UUID) accessor.getSessionAttributes().get(accessor.getSessionId() + "classId");
 
         if(role.equals("instructor")) {
-            websocketService.closeRoom(classId);
-            System.out.println("방삭제");
             MessageDTO messageDTO = websocketService.getRooms().get(classId);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
+            websocketService.closeRoom(classId);
+            System.out.println("방삭제");
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, "close");
         }
         else {
