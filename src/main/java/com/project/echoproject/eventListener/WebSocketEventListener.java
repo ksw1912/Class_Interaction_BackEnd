@@ -1,5 +1,6 @@
 package com.project.echoproject.eventListener;
 
+import com.project.echoproject.dto.websocketDTO.MessageDTO;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.WebsocketService;
 import org.springframework.context.event.EventListener;
@@ -46,8 +47,11 @@ public class WebSocketEventListener {
         // email 사용자 입장 인원 추가
         websocketService.addUserEmail(classId, email);
 
+        MessageDTO messageDTO = websocketService.getRooms().get(classId);
+        messageDTO.setStatus(MessageDTO.Status.OPEN);
+
         //사용자 정보 접속 인원 보내주기
-        messagingTemplate.convertAndSend("/topic/classroom/" + classId, websocketService.getUserCountInRoom(classId));
+        messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
     }
 
     //SessionUnsubscribeEvent 테스트 X
@@ -76,5 +80,7 @@ public class WebSocketEventListener {
         }
         accessor.getSessionAttributes().remove(accessor.getSessionId()+"email");
         accessor.getSessionAttributes().remove(accessor.getSessionId()+"role");
+
+
     }
 }

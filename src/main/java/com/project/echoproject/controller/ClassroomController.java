@@ -88,9 +88,13 @@ public class ClassroomController {
     public ResultUpdateClassroomDTO updateOpinions(@RequestBody UpdateClassroomDTO updateClassroomDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         String email = jwtUtil.getEmail(jwtToken);
-        Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
-        List<Opinion> opinionList = opinionService.UpdateOpinion(updateClassroomDTO, email, classroom);
-        return new ResultUpdateClassroomDTO(classroom,opinionList);
+        if(updateClassroomDTO.getClassroom() != null) {
+            Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
+            List<Opinion> opinionList = opinionService.updateOpinion(updateClassroomDTO, email, classroom);
+
+            return new ResultUpdateClassroomDTO(classroom, opinionList);
+        }
+        throw new IllegalArgumentException("클래스룸 null이뜸  ");
     }
 
     @DeleteMapping("/classDelete/{id}")

@@ -44,21 +44,27 @@ public class OpinionService {
     }
 
     @Transactional
-    public List<Opinion> UpdateOpinion(UpdateClassroomDTO updateClassroomDTO, String email,Classroom room){
+    public List<Opinion> updateOpinion(UpdateClassroomDTO updateClassroomDTO, String email,Classroom room){
         UUID classId = updateClassroomDTO.getClassroom().getClassId();
         List<String> opList = updateClassroomDTO.getOpinion();
+        List<Opinion> opinionList = new ArrayList<>();
 
         if (opinionRepository.existsByClassroomClassId(classId)) {
             opinionRepository.deleteByClassroomClassId(classId);
         }
-        return opList.stream()
-                .map(ops -> {
-                    Opinion op = new Opinion();
-                    op.setClassroom(room);
-                    op.setOpinion(ops);
-                    return opinionRepository.save(op);
-                })
-                .collect(Collectors.toList());
+        for(var oa : opList){
+            System.out.println(oa);
+        }
+        for(var ops : opList){
+            if(ops ==null  || ops.isEmpty()){
+                break;
+            }
+            Opinion op = new Opinion();
+            op.setOpinion(ops);
+            op.setClassroom(room);
+            opinionList.add(opinionRepository.save(op));
+        }
+        return opinionList;
     }
     @Transactional(readOnly = true)
     public List<Opinion> findOpinionId(UUID classId){
