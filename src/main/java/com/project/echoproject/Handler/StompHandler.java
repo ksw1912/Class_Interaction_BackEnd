@@ -44,7 +44,6 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             token = String.valueOf(accessor.getNativeHeader("Authorization"));
-
             System.out.println("websocket :" + token);
 
             if (token == null) {
@@ -64,6 +63,8 @@ public class StompHandler implements ChannelInterceptor {
             String role = jwtUtil.getRole(token);
             accessor.getSessionAttributes().put(accessor.getSessionId()+"email", email);
             accessor.getSessionAttributes().put(accessor.getSessionId()+"role", role);
+            String classId = accessor.getDestination();
+            accessor.getSessionAttributes().put(accessor.getSessionId() + "classId", classId);
             System.out.println("stompHandler: " + email + " " + role);
 
             //userEntity를 생성하여 값 set

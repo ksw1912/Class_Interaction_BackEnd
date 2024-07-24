@@ -49,13 +49,10 @@ public class OpinionService {
         if (opinionRepository.existsByClassroomClassId(classId)) {
             opinionRepository.deleteByClassroomClassId(classId);
         }
-        for (var oa : opList) {
-            System.out.println(oa);
-        }
 
         for (var ops : opList) {
             if (ops == null || ops.isEmpty()) {
-                continue; // break 대신 continue 사용
+                continue;
             }
             Opinion op = new Opinion();
             op.setOpinion(ops);

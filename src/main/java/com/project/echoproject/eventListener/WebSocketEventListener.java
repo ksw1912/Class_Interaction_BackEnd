@@ -31,8 +31,8 @@ public class WebSocketEventListener {
         System.out.println("사용자 입장");
 
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-        String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId()+"email");
-        String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId()+"role");
+        String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
+        String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
         String classIdString = accessor.getDestination();
         UUID classId = UUID.fromString(classIdString.split("/")[3]);
 
@@ -48,7 +48,7 @@ public class WebSocketEventListener {
         websocketService.addUserEmail(classId, email);
 
         MessageDTO messageDTO = websocketService.getRooms().get(classId);
-        messageDTO.setStatus(MessageDTO.Status.OPEN);
+        messageDTO.setStatus(MessageDTO.Status.PEOPLESTATUS);
 
         //사용자 정보 접속 인원 보내주기
         messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
@@ -57,38 +57,29 @@ public class WebSocketEventListener {
     //SessionUnsubscribeEvent 테스트 X
     @EventListener
     public void handleWebSocketDisconnectionListener(SessionUnsubscribeEvent event) { //STOMP session 이 끝났을 때 발생
+        System.out.println("퇴장");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-        String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId()+"email");
-        String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId()+"role");
-        String classIdString = accessor.getSubscriptionId();
-        System.out.println("test"+ classIdString);
-        String[] splitResult = classIdString.split("/");
-        UUID classId = null;
-        if (splitResult.length > 3) {
-            classId = UUID.fromString(splitResult[3]);
-        } else {
-            System.out.println("Invalid subscription ID format");
-            return;
-        }
+        String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
+        String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
+        UUID classId = (UUID) accessor.getSessionAttributes().get(accessor.getSessionId() + "classId");
 
-
-        if (email == null || role == null || classId == null) {
-            System.out.println("Invalid session attributes or destination");
-            return;
-        }
-
-        if (role.equals("student")) {
-            websocketService.removeUserEmailFromRoom(classId, email);
-            System.out.println("사용자 퇴장");
-            messagingTemplate.convertAndSend("/sub/classroom/" + classId, websocketService.getUserCountInRoom(classId));
-        } else {
+        if(role.equals("instructor")) {
             websocketService.closeRoom(classId);
             System.out.println("방삭제");
+            MessageDTO messageDTO = websocketService.getRooms().get(classId);
+            messageDTO.setStatus(MessageDTO.Status.CLOSE);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, "close");
         }
-        accessor.getSessionAttributes().remove(accessor.getSessionId()+"email");
-        accessor.getSessionAttributes().remove(accessor.getSessionId()+"role");
-
+        else {
+            websocketService.removeUserEmailFromRoom(classId, email);
+            System.out.println("사용자 퇴장");
+            MessageDTO messageDTO = websocketService.getRooms().get(classId);
+            messageDTO.setStatus(MessageDTO.Status.PEOPLESTATUS);
+            messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
+        }
+        accessor.getSessionAttributes().remove(accessor.getSessionId() + "email");
+        accessor.getSessionAttributes().remove(accessor.getSessionId() + "role");
+        accessor.getSessionAttributes().remove(accessor.getSessionId() + "classId");
 
     }
 }
