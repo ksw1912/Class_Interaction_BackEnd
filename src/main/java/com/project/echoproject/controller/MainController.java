@@ -25,10 +25,4 @@ public class MainController {
         String role = auth.getAuthority();
         return "Main Controller" + username + role;
     }
-
-//    @PostMapping("/login")
-//    public User Login(){
-//        r
-//        return
-//    }
 }

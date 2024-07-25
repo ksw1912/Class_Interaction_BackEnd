@@ -18,8 +18,9 @@ public class JoinController {
     public JoinController(JoinService joinService) {
         this.joinService = joinService;
     }
+
     @PostMapping("/join")
-    public ResponseEntity<ApiResponse> joinProcess(@RequestBody UserDTO userDTO){
+    public ResponseEntity<ApiResponse> joinProcess(@RequestBody UserDTO userDTO) {
         try {
             joinService.joinProcess(userDTO);
             return new ResponseEntity<>(new ApiResponse("회원가입이 완료되었습니다."), HttpStatus.OK);
@@ -29,7 +30,7 @@ public class JoinController {
     }
 
     @PostMapping("/checkEmail")
-    public ResponseEntity<ApiResponse> checkEmail(@RequestBody UserDTO userDTO){
+    public ResponseEntity<ApiResponse> checkEmail(@RequestBody UserDTO userDTO) {
         try {
             joinService.checkEmail(userDTO);
             return new ResponseEntity<>(new ApiResponse("이메일사용가능"), HttpStatus.OK);
@@ -38,9 +39,4 @@ public class JoinController {
             return new ResponseEntity<>(new ApiResponse(e.getMessage()), HttpStatus.CONFLICT);
         }
     }
-
-
-
-
-
 }

@@ -46,7 +46,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
         //클라이언트 요청에서 username, password 추출
         try {
             LoginDTO loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);

@@ -18,7 +18,7 @@ public class Quiz {
     @ManyToOne
     @JoinColumn
     private Classroom classroom;
-    @Column()
+    @Column
     private String question;
 
     public UUID getQuizId() {

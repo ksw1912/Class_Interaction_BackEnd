@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class MessageDTO {
     public enum Status{
-        OPEN,CLOSE,OPINION,OPINIONUPDATE,QUIZ,QUIZUPDATE,EVALUATION,PEOPLESTATUS,
+        OPEN,CLOSE,OPINION,OPINIONINITIALIZE,OPINIONUPDATE,QUIZ,QUIZUPDATE,EVALUATION,PEOPLESTATUS,
         //open 사용자입장
         //close 사용자퇴장
         //opinion 의견제출하기
@@ -23,7 +23,6 @@ public class MessageDTO {
         //persionstatus 사용자인원
 
     }
-
     private Status status;
     private Opinion opinion;
     private Quiz quiz;
