@@ -41,9 +41,12 @@ public class WebSocketEventListener {
         if (role.equals("instructor")) {
             websocketService.createRoom(classId);
         }
+
         //학생 방에 존재 하지 않을 경우
         if (!websocketService.roomExists(classId)) {
-            throw new IllegalArgumentException("방이 존재X");
+            MessageDTO messageDTO = null;
+            messageDTO.setStatus(MessageDTO.Status.CLOSE);
+            messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
         }
         // email 사용자 입장 인원 추가
         websocketService.addUserEmail(classId, email);
@@ -69,7 +72,7 @@ public class WebSocketEventListener {
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             websocketService.closeRoom(classId);
             System.out.println("방삭제");
-            messagingTemplate.convertAndSend("/sub/classroom/" + classId, "close");
+            messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
         }
         else {
             websocketService.removeUserEmailFromRoom(classId, email);

@@ -14,7 +14,6 @@ public class WebSocketController {
     @MessageMapping("/classroom/{classroomId}/message")
     @SendTo("/sub/classroom/{classroomId}")
     public MessageDTO classroomCommunication(@DestinationVariable String classroomId , MessageDTO message) throws Exception {
-        Thread.sleep(1000);
         return message;
     }
 }
