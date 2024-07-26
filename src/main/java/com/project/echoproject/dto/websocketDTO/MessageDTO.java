@@ -34,8 +34,8 @@ public class MessageDTO {
     public MessageDTO(Status status, Opinion opinion, List<Opinion> opinionList, List<Quiz> quiz, int evaluation, UUID classId, boolean classStatus) {
         this.status = status;
         this.opinion = opinion;
-        this.opinionList = opinionList != null ? new ArrayList<>(opinionList) : new ArrayList<>();
-        this.quiz = quiz != null ? new ArrayList<>(quiz) : new ArrayList<>();
+        this.opinionList = opinionList != null ? new ArrayList<>(opinionList) : null;
+        this.quiz = quiz != null ? new ArrayList<>(quiz) : null;
         this.evaluation = evaluation;
         this.classId = classId;
         this.classStatus = classStatus;
@@ -73,6 +73,14 @@ public class MessageDTO {
 
     public void setEvaluation(int evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public List<Opinion> getOpinionList() {
+        return opinionList;
+    }
+
+    public void setOpinionList(List<Opinion> opinionList) {
+        this.opinionList = opinionList;
     }
 
     public UUID getClassId() {
