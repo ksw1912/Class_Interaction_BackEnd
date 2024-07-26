@@ -3,15 +3,14 @@ package com.project.echoproject.controller;
 import com.project.echoproject.domain.Classroom;
 import com.project.echoproject.domain.Enrollment;
 import com.project.echoproject.domain.Opinion;
+import com.project.echoproject.domain.Quiz;
 import com.project.echoproject.dto.ApiResponse;
-import com.project.echoproject.dto.classroom.ClassroomDTO;
-import com.project.echoproject.dto.classroom.ClassroomResultDTO;
-import com.project.echoproject.dto.classroom.ResultUpdateClassroomDTO;
-import com.project.echoproject.dto.classroom.UpdateClassroomDTO;
+import com.project.echoproject.dto.classroom.*;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.ClassroomService;
 import com.project.echoproject.service.EnrollmentService;
 import com.project.echoproject.service.OpinionService;
+import com.project.echoproject.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,12 +26,14 @@ public class ClassroomController {
     private final ClassroomService classroomService;
     private final OpinionService opinionService;
     private final EnrollmentService enrollmentService;
+    private final QuizService quizService;
     private final JWTUtil jwtUtil;
 
-    public ClassroomController(ClassroomService classroomService, OpinionService opinionService, EnrollmentService enrollmentService, JWTUtil jwtUtil) {
+    public ClassroomController(ClassroomService classroomService, OpinionService opinionService, EnrollmentService enrollmentService, QuizService quizService, JWTUtil jwtUtil) {
         this.classroomService = classroomService;
         this.opinionService = opinionService;
         this.enrollmentService = enrollmentService;
+        this.quizService = quizService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -106,6 +107,14 @@ public class ClassroomController {
         return opinionService.findOpinionId(classId);
     }
 
+
+    @PostMapping("/quiz")
+    public List<Quiz> createQuiz(@RequestBody QuizDTO quizDTO){
+        if(classroomService.isClassIdDuplicate(quizDTO.getClassId())){
+            return quizService.quizSave(quizDTO.getQuiz());
+        }
+        throw new IllegalArgumentException("수업이 존재하지않습니다");
+    }
 //    // 특정 교수의 이메일로 클래스룸 목록 가져오기
 //    @GetMapping("/instructor/{email}")
 //    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {

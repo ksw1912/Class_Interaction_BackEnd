@@ -22,7 +22,7 @@ public class WebsocketService {
     }
 
     public void createRoom(UUID classId) {
-        rooms.putIfAbsent(classId,new MessageDTO(MessageDTO.Status.OPEN,null,null,0,classId,true));
+        rooms.putIfAbsent(classId,new MessageDTO(MessageDTO.Status.OPEN,null,null,null,0,classId,true));
     }
     public void closeRoom(UUID classId){
         rooms.remove(classId);

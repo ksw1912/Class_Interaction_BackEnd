@@ -25,23 +25,25 @@ public class MessageDTO {
     }
     private Status status;
     private Opinion opinion;
-    private Quiz quiz;
+    private List<Opinion> opinionList;
+    private List<Quiz> quiz;
     private int evaluation;
     private UUID classId;
     @JsonIgnore
     private boolean classStatus;
     private Set<String> userEmails;
 
-    @JsonCreator
-    public MessageDTO(Status status, Opinion opinion, Quiz quiz, int evaluation, UUID classId, boolean classStatus) {
+    public MessageDTO(Status status, Opinion opinion, List<Opinion> opinionList, List<Quiz> quiz, int evaluation, UUID classId, boolean classStatus) {
         this.status = status;
         this.opinion = opinion;
+        this.opinionList = opinionList;
         this.quiz = quiz;
         this.evaluation = evaluation;
         this.classId = classId;
         this.classStatus = classStatus;
         this.userEmails = new HashSet<>();
     }
+
 
     public Status getStatus() {
         return status;
@@ -59,11 +61,11 @@ public class MessageDTO {
         this.opinion = opinion;
     }
 
-    public Quiz getQuiz() {
+    public List<Quiz> getQuiz() {
         return quiz;
     }
 
-    public void setQuiz(Quiz quiz) {
+    public void setQuiz(List<Quiz> quiz) {
         this.quiz = quiz;
     }
 
