@@ -33,6 +33,7 @@ public class MessageDTO {
     private boolean classStatus;
     private Set<String> userEmails;
 
+    @JsonCreator
     public MessageDTO(Status status, Opinion opinion, List<Opinion> opinionList, List<Quiz> quiz, int evaluation, UUID classId, boolean classStatus) {
         this.status = status;
         this.opinion = opinion;
