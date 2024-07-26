@@ -22,8 +22,9 @@ public class MessageDTO {
     }
     private Status status;
     private Opinion opinion;
+    private Quiz quiz;
     private List<Opinion> opinionList;
-    private List<Quiz> quiz;
+    private List<Quiz> quizList;
     private int evaluation;
     private UUID classId;
     @JsonIgnore
@@ -31,11 +32,12 @@ public class MessageDTO {
     private Set<String> userEmails;
 
     @JsonCreator
-    public MessageDTO(Status status, Opinion opinion, List<Opinion> opinionList, List<Quiz> quiz, int evaluation, UUID classId, boolean classStatus) {
+    public MessageDTO(Status status, Opinion opinion, Quiz quiz,List<Opinion> opinionList, List<Quiz> quizList, int evaluation, UUID classId, boolean classStatus) {
         this.status = status;
         this.opinion = opinion;
+        this.quiz = quiz;
         this.opinionList = opinionList != null ? new ArrayList<>(opinionList) : null;
-        this.quiz = quiz != null ? new ArrayList<>(quiz) : null;
+        this.quizList = quizList != null ? new ArrayList<>(quizList) : null;
         this.evaluation = evaluation;
         this.classId = classId;
         this.classStatus = classStatus;
@@ -59,12 +61,12 @@ public class MessageDTO {
         this.opinion = opinion;
     }
 
-    public List<Quiz> getQuiz() {
-        return quiz;
+    public List<Quiz> getQuizList() {
+        return quizList;
     }
 
-    public void setQuiz(List<Quiz> quiz) {
-        this.quiz = quiz;
+    public void setQuizList(List<Quiz> quizList) {
+        this.quizList = quizList;
     }
 
     public int getEvaluation() {
