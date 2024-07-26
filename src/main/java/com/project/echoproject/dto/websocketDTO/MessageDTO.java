@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.echoproject.domain.Opinion;
 import com.project.echoproject.domain.Quiz;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class MessageDTO {
     public enum Status{
@@ -37,8 +34,8 @@ public class MessageDTO {
     public MessageDTO(Status status, Opinion opinion, List<Opinion> opinionList, List<Quiz> quiz, int evaluation, UUID classId, boolean classStatus) {
         this.status = status;
         this.opinion = opinion;
-        this.opinionList = opinionList;
-        this.quiz = quiz;
+        this.opinionList = opinionList != null ? new ArrayList<>(opinionList) : new ArrayList<>();
+        this.quiz = quiz != null ? new ArrayList<>(quiz) : new ArrayList<>();
         this.evaluation = evaluation;
         this.classId = classId;
         this.classStatus = classStatus;
