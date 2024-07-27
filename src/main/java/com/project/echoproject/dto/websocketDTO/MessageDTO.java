@@ -89,6 +89,14 @@ public class MessageDTO {
         return classId;
     }
 
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
     public void setClassId(UUID classId) {
         this.classId = classId;
     }
