@@ -7,6 +7,7 @@ import com.project.echoproject.repository.EnrollmentRepository;
 import com.project.echoproject.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,11 @@ public class EnrollmentService {
 
     public boolean duplicateEnrollClassroom(UUID classId){
         return enrollmentRepository.existsByClassroomClassId(classId);
+    }
+
+    @Transactional
+    public void deleteEnrollment(UUID id) {
+        enrollmentRepository.deleteById(id);
     }
 
 }
