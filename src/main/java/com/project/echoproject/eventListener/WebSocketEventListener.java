@@ -57,10 +57,15 @@ public class WebSocketEventListener {
         //사용자 정보 접속 인원 보내주기
         messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
     }
-
-    //SessionUnsubscribeEvent 테스트 X
+//    SessionDisconnectEvent
+@EventListener
+public void handleTest(SessionDisconnectEvent event){
+    System.out.println("테스트");
+}
+    //SessionUnsubscribeEvent
+    //SessionDisconnectEvent
     @EventListener
-    public void handleWebSocketDisconnectionListener(SessionDisconnectEvent event) { //STOMP session 이 끝났을 때 발생
+    public void handleWebSocketDisconnectionListener(SessionUnsubscribeEvent event) { //STOMP session 이 끝났을 때 발생
         System.out.println("퇴장");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
