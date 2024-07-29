@@ -44,7 +44,7 @@ public class WebSocketEventListener {
 
         //학생 방에 존재 하지 않을 경우
         if (!websocketService.roomExists(classId)) {
-            MessageDTO messageDTO = null;
+            MessageDTO messageDTO = new MessageDTO(MessageDTO.Status.CLOSE,null,null,null,null,0,null,false);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
         }
