@@ -8,6 +8,17 @@ import java.util.UUID;
 public class QuizDTO {
     UUID classId;
     List<Quiz> quiz;
+    String question;
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+
 
     public UUID getClassId() {
         return classId;
