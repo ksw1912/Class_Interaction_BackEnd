@@ -60,7 +60,7 @@ public class WebSocketEventListener {
 
     //SessionUnsubscribeEvent 테스트 X
     @EventListener
-    public void handleWebSocketDisconnectionListener(SessionUnsubscribeEvent event) { //STOMP session 이 끝났을 때 발생
+    public void handleWebSocketDisconnectionListener(SessionDisconnectEvent event) { //STOMP session 이 끝났을 때 발생
         System.out.println("퇴장");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
