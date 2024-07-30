@@ -32,6 +32,7 @@ public class EnrollmentService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Enrollment> findByEnroll(String email){
        return enrollmentRepository.findByStudentEmail(email);
     }
@@ -43,6 +44,12 @@ public class EnrollmentService {
     @Transactional
     public void deleteEnrollment(UUID id) {
         enrollmentRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Enrollment findByEnrollmentClassId(Classroom classroom){
+        Enrollment enrollment = enrollmentRepository.findByClassroomClassId(classroom.getClassId()).orElseThrow();
+        return enrollment;
     }
 
 }
