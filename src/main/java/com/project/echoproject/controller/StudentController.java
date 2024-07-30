@@ -28,7 +28,7 @@ public class StudentController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/enrollmentAdd/${classId}")
+    @GetMapping("/enrollmentAdd/{classId}")
     public Enrollment getEnrollment(@PathVariable UUID classId){
         Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
         return enrollmentService.findByEnrollmentClassId(classroom);
