@@ -32,10 +32,6 @@ public class EnrollmentService {
         }
     }
 
-    public List<Enrollment> findByEnroll(String email){
-       return enrollmentRepository.findByStudentEmail(email);
-    }
-
     public boolean duplicateEnrollClassroom(UUID classId){
         return enrollmentRepository.existsByClassroomClassId(classId);
     }
@@ -43,6 +39,12 @@ public class EnrollmentService {
     @Transactional
     public void deleteEnrollment(UUID id) {
         enrollmentRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Enrollment findByEnrollmentClassId(Classroom classroom){
+        Enrollment enrollment = enrollmentRepository.findByClassroomClassId(classroom.getClassId()).orElseThrow();
+        return enrollment;
     }
 
 }

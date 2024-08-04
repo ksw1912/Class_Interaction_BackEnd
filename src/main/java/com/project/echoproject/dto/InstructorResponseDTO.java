@@ -5,7 +5,7 @@ import com.project.echoproject.domain.User;
 
 import java.util.List;
 
-public class InstructorResponseDTO{
+public class InstructorResponseDTO {
     private User user;
     private List<Classroom> classrooms;
 

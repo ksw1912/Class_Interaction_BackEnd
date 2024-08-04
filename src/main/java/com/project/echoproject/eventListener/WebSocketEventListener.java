@@ -28,7 +28,6 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketSubscribeEventListener(SessionSubscribeEvent event) { //세션 연결할 때 발생
-        System.out.println("사용자 입장");
 
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
@@ -44,7 +43,7 @@ public class WebSocketEventListener {
 
         //학생 방에 존재 하지 않을 경우
         if (!websocketService.roomExists(classId)) {
-            MessageDTO messageDTO = null;
+            MessageDTO messageDTO = new MessageDTO(MessageDTO.Status.CLOSE, null, null, null, null, 0, null, false);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
         }
@@ -58,25 +57,22 @@ public class WebSocketEventListener {
         messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
     }
 
-    //SessionUnsubscribeEvent 테스트 X
+    //SessionUnsubscribeEvent
+    //SessionDisconnectEvent
     @EventListener
     public void handleWebSocketDisconnectionListener(SessionUnsubscribeEvent event) { //STOMP session 이 끝났을 때 발생
-        System.out.println("퇴장");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
         String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
         UUID classId = (UUID) accessor.getSessionAttributes().get(accessor.getSessionId() + "classId");
 
-        if(role.equals("instructor")) {
+        if (role.equals("instructor")) {
             MessageDTO messageDTO = websocketService.getRooms().get(classId);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             websocketService.closeRoom(classId);
-            System.out.println("방삭제");
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
-        }
-        else {
+        } else {
             websocketService.removeUserEmailFromRoom(classId, email);
-            System.out.println("사용자 퇴장");
             MessageDTO messageDTO = websocketService.getRooms().get(classId);
             messageDTO.setStatus(MessageDTO.Status.PEOPLESTATUS);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);

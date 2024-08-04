@@ -45,15 +45,4 @@ public class WebsocketService {
         }
     }
 
-
-    public int getUserCountInRoom(UUID classId){
-        return rooms.get(classId).getUserEmails().size();
-    }
-
-
-//    public ClassDTO getRooms(UUID classId){
-//        return rooms.get(classId);
-//    }
-
-
 }

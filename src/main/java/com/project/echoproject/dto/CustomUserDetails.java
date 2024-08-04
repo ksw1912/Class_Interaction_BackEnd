@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
+
     private final User userEntity;
 
     public CustomUserDetails(User userEntity) {

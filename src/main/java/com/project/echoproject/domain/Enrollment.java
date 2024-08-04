@@ -16,10 +16,7 @@ import java.util.UUID;
 public class Enrollment {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "enrollmentId",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "enrollmentId", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false)
     private UUID enrollmentID;
 
@@ -78,6 +75,7 @@ public class Enrollment {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
