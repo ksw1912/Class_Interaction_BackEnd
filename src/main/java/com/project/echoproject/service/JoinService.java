@@ -66,7 +66,6 @@ public class JoinService {
             System.out.println("이메일: "+ email);
             throw new IllegalStateException("사용가능한 이메일입니다.: " + email);
         }
-
          else {
             System.out.println("이메일중복스: "+ email);
            // throw new IllegalStateException("사용가능한 이메일입니다: " + email);
