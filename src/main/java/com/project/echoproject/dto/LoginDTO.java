@@ -1,7 +1,6 @@
 package com.project.echoproject.dto;
 
 public class LoginDTO {
-
     private String email;
     private String password;
     private String role;

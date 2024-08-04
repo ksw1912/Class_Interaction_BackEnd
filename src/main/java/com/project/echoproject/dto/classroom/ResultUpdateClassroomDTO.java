@@ -6,7 +6,6 @@ import com.project.echoproject.domain.Opinion;
 import java.util.List;
 
 public class ResultUpdateClassroomDTO {
-
     Classroom classroom;
     List<Opinion> opinions;
 

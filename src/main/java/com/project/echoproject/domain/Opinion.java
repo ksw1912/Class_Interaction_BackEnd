@@ -11,13 +11,16 @@ import java.util.UUID;
 public class Opinion {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "opinionId", strategy = "org.hibernate.id.UUIDGenerator")
+    @GenericGenerator(
+            name = "opinionId",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(updatable = false, nullable = false)
     private UUID opinionId;
 
 
     @ManyToOne
-    @JoinColumn(name = "classId")
+    @JoinColumn(name="classId")
     private Classroom classroom;
     @Column
     private String opinion;

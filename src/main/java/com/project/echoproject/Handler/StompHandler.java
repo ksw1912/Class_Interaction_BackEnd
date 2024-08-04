@@ -44,8 +44,10 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             token = String.valueOf(accessor.getNativeHeader("Authorization"));
+            System.out.println("websocket :" + token);
 
             if (token == null) {
+                System.out.println("웹소켓에서 토큰이없음");
                 throw new IllegalArgumentException("토큰 X");
             }
 
@@ -59,8 +61,9 @@ public class StompHandler implements ChannelInterceptor {
             }
             String email = jwtUtil.getEmail(token);
             String role = jwtUtil.getRole(token);
-            accessor.getSessionAttributes().put(accessor.getSessionId() + "email", email);
-            accessor.getSessionAttributes().put(accessor.getSessionId() + "role", role);
+            accessor.getSessionAttributes().put(accessor.getSessionId()+"email", email);
+            accessor.getSessionAttributes().put(accessor.getSessionId()+"role", role);
+            System.out.println("stompHandler: " + email + " " + role);
 
             //userEntity를 생성하여 값 set
             User userEntity = new User();
@@ -76,8 +79,6 @@ public class StompHandler implements ChannelInterceptor {
             //세션에 사용자 등록
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
-
-
         return message;
     }
 }

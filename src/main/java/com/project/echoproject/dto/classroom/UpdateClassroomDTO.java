@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class UpdateClassroomDTO {
-
     Classroom classroom;
     List<String> opinion;
 

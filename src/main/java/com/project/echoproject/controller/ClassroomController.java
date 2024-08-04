@@ -55,14 +55,14 @@ public class ClassroomController {
         List<Opinion> opinions = opinionService.findOpinionId(classId);
         //학생일경우 수강목록에 저장
         if (role.equals("student")) {
-            enrollmentService.createEnroll(classroom, email);
+            enrollmentService.createEnroll(classroom,email);
         }
         return new ClassroomResultDTO(classroom, opinions);
     }
 
 
     @PostMapping("/classroomEnter/{classId}")
-    public ClassroomResultDTO classroomEnter(@PathVariable UUID classId, @RequestHeader("Authorization") String token) {
+    public ClassroomResultDTO classroomEnter(@PathVariable UUID classId,@RequestHeader("Authorization") String token) {
         Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
         List<Opinion> opinions = opinionService.findOpinionId(classId);
         String jwtToken = token.substring(7);
@@ -70,7 +70,7 @@ public class ClassroomController {
         String role = jwtUtil.getRole(jwtToken);
         //학생일경우 수강목록에 저장
         if (role.equals("student")) {
-            enrollmentService.createEnroll(classroom, email);
+            enrollmentService.createEnroll(classroom,email);
         }
         return new ClassroomResultDTO(classroom, opinions);
     }
@@ -92,7 +92,8 @@ public class ClassroomController {
 
         Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
         List<Opinion> opinionList = opinionService.UpdateOpinion(updateClassroomDTO, email, classroom);
-        return new ResultUpdateClassroomDTO(classroom, opinionList);
+        System.out.print("asd" + updateClassroomDTO.getOpinion());
+        return new ResultUpdateClassroomDTO(classroom,opinionList);
     }
 
     @DeleteMapping("/classDelete/{id}")
@@ -108,10 +109,38 @@ public class ClassroomController {
 
 
     @PostMapping("/quiz")
-    public List<Quiz> createQuiz(@RequestBody QuizDTO quizDTO) {
-        if (classroomService.isClassIdDuplicate(quizDTO.getClassId())) {
+    public List<Quiz> createQuiz(@RequestBody QuizDTO quizDTO){
+        if(classroomService.isClassIdDuplicate(quizDTO.getClassId())){
             return quizService.quizSave(quizDTO.getQuiz());
         }
         throw new IllegalArgumentException("수업이 존재하지않습니다");
     }
+//    // 특정 교수의 이메일로 클래스룸 목록 가져오기
+//    @GetMapping("/instructor/{email}")
+//    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {
+//        List<Classroom> classrooms = classroomService.getClassroomsByInstructorEmail(email);
+//        return classrooms;
+//    }
+//
+//    @GetMapping("/classroomEnter/{id}")
+//    public Optional<Classroom> getClassroomById(@PathVariable UUID id) {
+//        return classroomService.getClassroomById(id);
+//    }
+//
+//    @GetMapping
+//    public List<Classroom> getAllClassrooms() {
+//        return classroomService.getAllClassrooms();
+//    }
+//
+//    //안쓸 수도
+//    @GetMapping("/{className}")
+//    public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
+//        return classroomService.getClassroomByClassName(className);
+//    }
+
+//    @PutMapping("/{id}")
+//    public Classroom updateClassroom(@PathVariable Long id, @RequestBody Classroom updatedClassroom) {
+//        return classroomService.updateClassroom(id, updatedClassroom);
+//    }
+
 }

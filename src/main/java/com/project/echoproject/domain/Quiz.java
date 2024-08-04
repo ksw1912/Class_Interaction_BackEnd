@@ -9,7 +9,10 @@ import java.util.UUID;
 public class Quiz {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "quizId0", strategy = "org.hibernate.id.UUIDGenerator")
+    @GenericGenerator(
+            name = "quizId0",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(updatable = false, nullable = false)
     private UUID quizId;
     @ManyToOne

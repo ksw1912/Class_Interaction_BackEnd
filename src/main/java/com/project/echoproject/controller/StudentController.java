@@ -29,14 +29,16 @@ public class StudentController {
     }
 
     @GetMapping("/enrollmentAdd/{classId}")
-    public Enrollment getEnrollment(@PathVariable UUID classId) {
+    public Enrollment getEnrollment(@PathVariable UUID classId){
         Classroom classroom = classroomService.getClassroomById(classId).orElseThrow();
         return enrollmentService.findByEnrollmentClassId(classroom);
     }
-
     @DeleteMapping("/enrollmentDelete/{id}")
     public ApiResponse deleteEnrollment(@PathVariable UUID id) {
         enrollmentService.deleteEnrollment(id);
         return new ApiResponse("수업 삭제 성공");
     }
+
+
+
 }

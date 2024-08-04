@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
 
 @Entity
-public class Student extends User {
+public class Student extends User{
     @Column
     private String department;
 

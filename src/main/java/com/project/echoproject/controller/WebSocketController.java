@@ -10,7 +10,8 @@ import org.springframework.stereotype.Controller;
 public class WebSocketController {
     @MessageMapping("/classroom/{classroomId}/message")
     @SendTo("/sub/classroom/{classroomId}")
-    public MessageDTO classroomCommunication(@DestinationVariable String classroomId, MessageDTO message) throws Exception {
+    public MessageDTO classroomCommunication(@DestinationVariable String classroomId , MessageDTO message) throws Exception {
+        System.out.println(message.getStatus());
         return message;
     }
 }

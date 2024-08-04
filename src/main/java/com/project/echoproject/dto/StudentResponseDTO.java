@@ -6,7 +6,6 @@ import com.project.echoproject.domain.User;
 import java.util.List;
 
 public class StudentResponseDTO {
-
     private User user;
     private List<Enrollment> enrollments;
 
