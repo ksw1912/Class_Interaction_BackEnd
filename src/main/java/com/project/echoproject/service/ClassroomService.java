@@ -23,6 +23,7 @@ public class ClassroomService {
     private final InstructorRepository instructorRepository;
     private final ScheduledExecutorService scheduledExecutorService;
     private final ConcurrentHashMap<String, UUID> pinMapping = new ConcurrentHashMap<>();
+
     @Autowired
     public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository, ScheduledExecutorService scheduledExecutorService) {
         this.classroomRepository = classroomRepository;
@@ -76,7 +77,6 @@ public class ClassroomService {
         }
         throw new IllegalArgumentException("Classroom does not exist");
     }
-
 
 
     @Transactional

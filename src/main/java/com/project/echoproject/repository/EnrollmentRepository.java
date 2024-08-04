@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
     List<Enrollment> findByStudentEmail(String email);
+
     boolean existsByClassroomClassId(UUID classId);
+
     Optional<Enrollment> findByClassroomClassId(UUID classId);
 }

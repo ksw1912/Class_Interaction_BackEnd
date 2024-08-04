@@ -32,11 +32,6 @@ public class EnrollmentService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<Enrollment> findByEnroll(String email){
-       return enrollmentRepository.findByStudentEmail(email);
-    }
-
     public boolean duplicateEnrollClassroom(UUID classId){
         return enrollmentRepository.existsByClassroomClassId(classId);
     }

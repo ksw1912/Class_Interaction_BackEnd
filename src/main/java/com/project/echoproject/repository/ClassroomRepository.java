@@ -13,13 +13,11 @@ import java.util.UUID;
 @Repository
 public interface ClassroomRepository extends JpaRepository<Classroom, UUID> {
     Optional<Classroom> findByClassName(String className);
+
     //classname 중복여부 판단
     boolean existsByClassName(String className);
+
     boolean existsByClassId(UUID classId);
-    // 특정 교수의 ID로 클래스룸 찾기
-    // 특정 교수의 ID로 클래스룸 찾기
-    @Query("SELECT c FROM classroom c WHERE c.instructor.id = :instructorId")
-    List<Classroom> findByInstructorId(@Param("instructorId") UUID instructorId);
 
     // 특정 교수의 이메일로 클래스룸 찾기
     List<Classroom> findByInstructorEmail(String email);
