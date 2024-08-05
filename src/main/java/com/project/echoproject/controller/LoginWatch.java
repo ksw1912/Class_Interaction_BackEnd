@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/watch")
 public class LoginWatch {
     ConcurrentHashMap<String, String> hs = new ConcurrentHashMap<>();
-
     @GetMapping("/phone/{pin}")
     public ResponseEntity<String> pinMade(@PathVariable String pin, @RequestHeader("Authorization") String token){
         hs.put(pin,token);

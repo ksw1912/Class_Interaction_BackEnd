@@ -23,19 +23,15 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("token null");
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
             return;
         }
-        System.out.println("authorization now");
-        System.out.println("접속한 사용자 토큰:"+ authorization);
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
         //토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
-            System.out.println("token expired");
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
             return;

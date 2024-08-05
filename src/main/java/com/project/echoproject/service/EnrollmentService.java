@@ -18,12 +18,13 @@ public class EnrollmentService {
     private final StudentRepository studentRepository;
 
     @Autowired
-    public EnrollmentService(EnrollmentRepository enrollmentRepository,StudentRepository studentRepository) {
+    public EnrollmentService(EnrollmentRepository enrollmentRepository, StudentRepository studentRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.studentRepository = studentRepository;
     }
-    public void createEnroll(Classroom classroom,String email){
-        if(!duplicateEnrollClassroom(classroom.getClassId())){
+
+    public void createEnroll(Classroom classroom, String email) {
+        if (!duplicateEnrollClassroom(classroom.getClassId())) {
             Student student = studentRepository.findByEmail(email);
             Enrollment enrollment = new Enrollment();
             enrollment.setClassroom(classroom);
@@ -33,11 +34,11 @@ public class EnrollmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Enrollment> findByEnroll(String email){
-       return enrollmentRepository.findByStudentEmail(email);
+    public List<Enrollment> findByEnroll(String email) {
+        return enrollmentRepository.findByStudentEmail(email);
     }
 
-    public boolean duplicateEnrollClassroom(UUID classId){
+    public boolean duplicateEnrollClassroom(UUID classId) {
         return enrollmentRepository.existsByClassroomClassId(classId);
     }
 
@@ -47,7 +48,7 @@ public class EnrollmentService {
     }
 
     @Transactional(readOnly = true)
-    public Enrollment findByEnrollmentClassId(Classroom classroom){
+    public Enrollment findByEnrollmentClassId(Classroom classroom) {
         Enrollment enrollment = enrollmentRepository.findByClassroomClassId(classroom.getClassId()).orElseThrow();
         return enrollment;
     }

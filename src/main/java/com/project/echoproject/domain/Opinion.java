@@ -20,7 +20,7 @@ public class Opinion {
 
 
     @ManyToOne
-    @JoinColumn(name="classId")
+    @JoinColumn(name = "classId")
     private Classroom classroom;
     @Column
     private String opinion;

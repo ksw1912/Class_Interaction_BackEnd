@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class OpinionService {
     private OpinionRepository opinionRepository;
-
     public OpinionService(OpinionRepository opinionRepository) {
         this.opinionRepository = opinionRepository;
     }
@@ -39,11 +38,11 @@ public class OpinionService {
                 .collect(Collectors.toList());
         return opinionList;
     }
+
     @Transactional
     public List<Opinion> UpdateOpinion(UpdateClassroomDTO updateClassroomDTO, String email, Classroom room) {
         UUID classId = updateClassroomDTO.getClassroom().getClassId();
         List<String> opList = updateClassroomDTO.getOpinion();
-        System.out.println(updateClassroomDTO.getOpinion());
         List<Opinion> opinionList = new ArrayList<>();
 
         if (opinionRepository.existsByClassroomClassId(classId)) {
@@ -62,8 +61,9 @@ public class OpinionService {
         return opinionList;
 
     }
+
     @Transactional(readOnly = true)
-    public List<Opinion> findOpinionId(UUID classId){
+    public List<Opinion> findOpinionId(UUID classId) {
         return opinionRepository.findByClassroomClassId(classId);
     }
 

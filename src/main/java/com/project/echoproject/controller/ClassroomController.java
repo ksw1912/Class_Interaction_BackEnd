@@ -92,7 +92,6 @@ public class ClassroomController {
 
         Classroom classroom = classroomService.updateClassroom(updateClassroomDTO.getClassroom());
         List<Opinion> opinionList = opinionService.UpdateOpinion(updateClassroomDTO, email, classroom);
-        System.out.print("asd" + updateClassroomDTO.getOpinion());
         return new ResultUpdateClassroomDTO(classroom,opinionList);
     }
 
@@ -115,32 +114,5 @@ public class ClassroomController {
         }
         throw new IllegalArgumentException("수업이 존재하지않습니다");
     }
-//    // 특정 교수의 이메일로 클래스룸 목록 가져오기
-//    @GetMapping("/instructor/{email}")
-//    public List<Classroom> getClassroomsByInstructorEmail(@PathVariable String email) {
-//        List<Classroom> classrooms = classroomService.getClassroomsByInstructorEmail(email);
-//        return classrooms;
-//    }
-//
-//    @GetMapping("/classroomEnter/{id}")
-//    public Optional<Classroom> getClassroomById(@PathVariable UUID id) {
-//        return classroomService.getClassroomById(id);
-//    }
-//
-//    @GetMapping
-//    public List<Classroom> getAllClassrooms() {
-//        return classroomService.getAllClassrooms();
-//    }
-//
-//    //안쓸 수도
-//    @GetMapping("/{className}")
-//    public Optional<Classroom> getClassroomByClassName(@PathVariable String className) {
-//        return classroomService.getClassroomByClassName(className);
-//    }
-
-//    @PutMapping("/{id}")
-//    public Classroom updateClassroom(@PathVariable Long id, @RequestBody Classroom updatedClassroom) {
-//        return classroomService.updateClassroom(id, updatedClassroom);
-//    }
 
 }

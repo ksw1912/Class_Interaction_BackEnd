@@ -17,18 +17,21 @@ public class WebsocketService {
     public Map<UUID, MessageDTO> getRooms() {
         return rooms;
     }
+
     public boolean roomExists(UUID classId) {
         return rooms.containsKey(classId);
     }
 
     public void createRoom(UUID classId) {
-        rooms.putIfAbsent(classId,new MessageDTO(MessageDTO.Status.OPEN,null,null,null,null,0,classId,true));
+        rooms.putIfAbsent(classId, new MessageDTO(MessageDTO.Status.OPEN, null, null, null, null, 0, classId, true));
     }
-    public void closeRoom(UUID classId){
+
+    public void closeRoom(UUID classId) {
         rooms.remove(classId);
     }
+
     public void addUserEmail(UUID classId, String email) {
-        if(rooms.get(classId) != null) {
+        if (rooms.get(classId) != null) {
             rooms.get(classId).getUserEmails().add(email);
         }
     }
@@ -44,16 +47,4 @@ public class WebsocketService {
             }
         }
     }
-
-
-    public int getUserCountInRoom(UUID classId){
-        return rooms.get(classId).getUserEmails().size();
-    }
-
-
-//    public ClassDTO getRooms(UUID classId){
-//        return rooms.get(classId);
-//    }
-
-
 }

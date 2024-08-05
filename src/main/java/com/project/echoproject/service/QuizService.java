@@ -16,7 +16,6 @@ public class QuizService {
         this.quizRepository = quizRepository;
     }
 
-
     public List<Quiz> quizSave(List<Quiz> quizList) {
         List<Quiz> lists = quizList.stream()
                 .filter(q -> q.getClassroom() != null && q.getQuestion() != null)
@@ -24,9 +23,4 @@ public class QuizService {
                 .collect(Collectors.toList());
         return lists;
     }
-
-    List<Quiz> findByQuizId(UUID quizId) {
-        return quizRepository.findByQuizId(quizId);
-    }
-
 }

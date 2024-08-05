@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JoinService {
-
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
     private final InstructorRepository instructorRepository;
@@ -67,10 +66,6 @@ public class JoinService {
             throw new IllegalStateException("사용가능한 이메일입니다.: " + email);
         }
 
-         else {
-            System.out.println("이메일중복스: "+ email);
-           // throw new IllegalStateException("사용가능한 이메일입니다: " + email);
-        }
     }
 
 }

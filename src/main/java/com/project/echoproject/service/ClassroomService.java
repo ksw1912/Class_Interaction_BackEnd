@@ -23,6 +23,7 @@ public class ClassroomService {
     private final InstructorRepository instructorRepository;
     private final ScheduledExecutorService scheduledExecutorService;
     private final ConcurrentHashMap<String, UUID> pinMapping = new ConcurrentHashMap<>();
+
     @Autowired
     public ClassroomService(ClassroomRepository classroomRepository, InstructorRepository instructorRepository, ScheduledExecutorService scheduledExecutorService) {
         this.classroomRepository = classroomRepository;
@@ -34,7 +35,6 @@ public class ClassroomService {
     public Classroom createClassroom(ClassroomDTO classroomDTO, String email) {
         String className = classroomDTO.getClassName();
         if (isClassNameDuplicate(className)) {
-            System.out.println("classroomDB 중복");
             throw new IllegalArgumentException("클래스룸이 이미 존재합니다.");
         }
         // Classroom 객체 생성 및 저장
@@ -76,7 +76,6 @@ public class ClassroomService {
         }
         throw new IllegalArgumentException("Classroom does not exist");
     }
-
 
 
     @Transactional

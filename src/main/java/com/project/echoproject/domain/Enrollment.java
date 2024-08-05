@@ -78,6 +78,7 @@ public class Enrollment {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

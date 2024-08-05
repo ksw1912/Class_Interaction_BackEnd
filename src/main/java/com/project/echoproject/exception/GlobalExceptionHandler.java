@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(DuplicateClassNameException.class)
     public ResponseEntity<String> handleDuplicateClassNameException(DuplicateClassNameException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
@@ -17,6 +16,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-
-
 }

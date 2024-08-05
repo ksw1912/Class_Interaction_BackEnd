@@ -19,10 +19,7 @@ import java.util.UUID;
 public class Classroom {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "classId",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "classId", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false)
     private UUID classId;
     @ManyToOne //many: 클래스룸 one: 교육자

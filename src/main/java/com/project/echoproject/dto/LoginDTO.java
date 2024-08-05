@@ -5,7 +5,6 @@ public class LoginDTO {
     private String password;
     private String role;
 
-    // Getters and setters
     public String getEmail() {
         return email;
     }

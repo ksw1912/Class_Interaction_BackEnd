@@ -4,7 +4,6 @@ import com.project.echoproject.dto.websocketDTO.MessageDTO;
 import com.project.echoproject.jwt.JWTUtil;
 import com.project.echoproject.service.WebsocketService;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
@@ -27,9 +26,7 @@ public class WebSocketEventListener {
     }
 
     @EventListener
-    public void handleWebSocketSubscribeEventListener(SessionSubscribeEvent event) { //세션 연결할 때 발생
-        System.out.println("사용자 입장");
-
+    public void handleWebSocketSubscribeEventListener(SessionSubscribeEvent event) { //세션 연결할 때 발생`
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
         String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
@@ -44,7 +41,7 @@ public class WebSocketEventListener {
 
         //학생 방에 존재 하지 않을 경우
         if (!websocketService.roomExists(classId)) {
-            MessageDTO messageDTO = new MessageDTO(MessageDTO.Status.CLOSE,null,null,null,null,0,null,false);
+            MessageDTO messageDTO = new MessageDTO(MessageDTO.Status.CLOSE, null, null, null, null, 0, null, false);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
         }
@@ -57,31 +54,29 @@ public class WebSocketEventListener {
         //사용자 정보 접속 인원 보내주기
         messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
     }
-//    SessionDisconnectEvent
-@EventListener
-public void handleTest(SessionDisconnectEvent event){
-    System.out.println("테스트");
-}
+
+    //    SessionDisconnectEvent
+    @EventListener
+    public void handleTest(SessionDisconnectEvent event) {
+
+    }
+
     //SessionUnsubscribeEvent
     //SessionDisconnectEvent
     @EventListener
     public void handleWebSocketDisconnectionListener(SessionUnsubscribeEvent event) { //STOMP session 이 끝났을 때 발생
-        System.out.println("퇴장");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String email = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "email");
         String role = (String) accessor.getSessionAttributes().get(accessor.getSessionId() + "role");
         UUID classId = (UUID) accessor.getSessionAttributes().get(accessor.getSessionId() + "classId");
 
-        if(role.equals("instructor")) {
+        if (role.equals("instructor")) {
             MessageDTO messageDTO = websocketService.getRooms().get(classId);
             messageDTO.setStatus(MessageDTO.Status.CLOSE);
             websocketService.closeRoom(classId);
-            System.out.println("방삭제");
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);
-        }
-        else {
+        } else {
             websocketService.removeUserEmailFromRoom(classId, email);
-            System.out.println("사용자 퇴장");
             MessageDTO messageDTO = websocketService.getRooms().get(classId);
             messageDTO.setStatus(MessageDTO.Status.PEOPLESTATUS);
             messagingTemplate.convertAndSend("/sub/classroom/" + classId, messageDTO);

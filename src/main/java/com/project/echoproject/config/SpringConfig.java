@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 public class SpringConfig {
+
     @Bean
     public ScheduledExecutorService scheduledExecutorService() {
         return Executors.newScheduledThreadPool(1);

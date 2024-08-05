@@ -43,9 +43,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*")
                 .withSockJS();
 //        registry.setErrorHandler(chatErrorHandler); 예외처리 만들기
-
     }
-   @Override
+
+    @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompHandler);
     }

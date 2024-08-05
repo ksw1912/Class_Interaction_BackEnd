@@ -31,7 +31,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final EnrollmentRepository enrollmentRepository;
     private final JWTUtil jwtUtil;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository, ClassroomRepository classroomRepository, StudentRepository studentRepository, InstructorRepository instructorRepository,EnrollmentRepository enrollmentRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository, ClassroomRepository classroomRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, EnrollmentRepository enrollmentRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -52,7 +52,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             request.setCharacterEncoding("UTF-8");
             String email = loginRequest.getEmail();
             String password = loginRequest.getPassword();
-            System.out.println("이메일: "+ email + " " +"비밀번호: "+ password);
 
             //스프링 시큐리티에서 email과 password를 검증하기 위해서는 token에 담아야 함
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
@@ -80,13 +79,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         User user;
-        if(role.equals("student")){
+        if (role.equals("student")) {
             user = studentRepository.findByEmail(email);
             user.setPassword(null);
             List<Enrollment> enrollments = enrollmentRepository.findByStudentEmail(email);
-            response.getWriter().write(new ObjectMapper().writeValueAsString(new StudentResponseDTO(user,enrollments)));
-        }
-        else if(role.equals("instructor")){
+            response.getWriter().write(new ObjectMapper().writeValueAsString(new StudentResponseDTO(user, enrollments)));
+        } else if (role.equals("instructor")) {
             user = instructorRepository.findByEmail(email);
             List<Classroom> instructorInfo = classroomRepository.findByInstructorEmail(email);
             user.setPassword(null);
@@ -94,8 +92,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             resp.setUser(user);
             resp.setClassrooms(instructorInfo);
             response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
-        }
-        else{
+        } else {
             user = userRepository.findByEmail(email);
             user.setPassword(null);
             response.getWriter().write(new ObjectMapper().writeValueAsString(user));

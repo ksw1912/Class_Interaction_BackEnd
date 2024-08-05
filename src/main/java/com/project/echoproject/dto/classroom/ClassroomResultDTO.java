@@ -17,15 +17,12 @@ public class ClassroomResultDTO {
     public Classroom getClassroom() {
         return classroom;
     }
-
     public void setClassroom(Classroom classroom) {
         this.classroom = classroom;
     }
-
     public List<Opinion> getOpinions() {
         return opinions;
     }
-
     public void setOpinions(List<Opinion> opinions) {
         this.opinions = opinions;
     }

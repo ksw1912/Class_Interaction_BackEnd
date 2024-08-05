@@ -15,6 +15,7 @@ public class Quiz {
     )
     @Column(updatable = false, nullable = false)
     private UUID quizId;
+
     @ManyToOne
     @JoinColumn
     private Classroom classroom;

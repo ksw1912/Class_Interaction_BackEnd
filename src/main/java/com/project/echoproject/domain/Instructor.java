@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Entity
 public class Instructor extends User {
+
     @Column
     private String department;
 

@@ -12,10 +12,10 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         corsRegistry.addMapping("/**")
                 .allowedOrigins("*");
 
-    //                .allowedMethods("*")
-    //                .allowedHeaders("*")
-    //                .exposedHeaders("Authorization")
-    //                .allowCredentials(true)
-    //                .maxAge(3600); //프론트 주소 허용
+        //                .allowedMethods("*")
+        //                .allowedHeaders("*")
+        //                .exposedHeaders("Authorization")
+        //                .allowCredentials(true)
+        //                .maxAge(3600); //프론트 주소 허용
     }
 }

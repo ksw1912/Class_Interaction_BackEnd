@@ -35,7 +35,7 @@ public class SecurityConfig {
     private final EnrollmentRepository enrollmentRepository;
 
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, ClassroomRepository classroomRepository, InstructorRepository instructorRepository1,EnrollmentRepository enrollmentRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, UserRepository userRepository, StudentRepository studentRepository, InstructorRepository instructorRepository, ClassroomRepository classroomRepository, InstructorRepository instructorRepository1, EnrollmentRepository enrollmentRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
@@ -87,7 +87,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join" ,"/checkEmail","/classroomEnter/**","/watch/**"
+                        .requestMatchers("/login", "/", "/join", "/checkEmail", "/classroomEnter/**", "/watch/**"
                         ).permitAll() //모든 권한
 //                        .requestMatchers("/classroomEnter/**").authenticated()
                         .requestMatchers("/instructor/").hasRole("instructor") //admin만
@@ -96,7 +96,7 @@ public class SecurityConfig {
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,userRepository,classroomRepository,studentRepository, instructorRepository,enrollmentRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository, classroomRepository, studentRepository, instructorRepository, enrollmentRepository), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .sessionManagement((session) -> session

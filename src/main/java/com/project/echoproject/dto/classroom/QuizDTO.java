@@ -18,8 +18,6 @@ public class QuizDTO {
         this.question = question;
     }
 
-
-
     public UUID getClassId() {
         return classId;
     }

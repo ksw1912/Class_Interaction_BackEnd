@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JoinController {
     private final JoinService joinService;
-
     @Autowired
     public JoinController(JoinService joinService) {
         this.joinService = joinService;
