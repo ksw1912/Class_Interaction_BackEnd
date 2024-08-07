@@ -42,13 +42,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/classroomEnter").setAllowedOriginPatterns("*")
                 .withSockJS();
-//        registry.setErrorHandler(chatErrorHandler); 예외처리 만들기
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompHandler);
     }
-
 }
 
